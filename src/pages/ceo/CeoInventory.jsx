@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
-  Package,
-  Plus,
-  Search,
-  AlertTriangle,
-  RefreshCw,
-  Edit2,
-  Trash2,
-  Check,
-  X,
-  Filter,
-  BarChart2
+  Package, Plus, Search, AlertTriangle, RefreshCw, X, Camera, Sparkles
 } from 'lucide-react';
 
 export const CeoInventory = () => {
-  const { products, addProduct, restockProduct } = useApp();
+  const { products, addProduct, restockProduct, addToast } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [addMode, setAddMode] = useState('manual'); // 'manual' | 'ai'
+  const [aiProcessing, setAiProcessing] = useState(false);
+  const [aiResult, setAiResult] = useState(null);
 
   // New Product Form
   const [name, setName] = useState('');
@@ -28,86 +21,111 @@ export const CeoInventory = () => {
   const [stock, setStock] = useState('20');
   const [image, setImage] = useState('https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop&q=80');
 
-  const categories = ['All', 'Electronics', 'Clothing', 'Food', 'Beverages'];
+  const categories = ['All', 'Electronics', 'Clothing', 'Food', 'Beverages', 'Auto Parts'];
 
   const filteredProducts = products.filter(p => {
-    const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
-    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          p.barcode.includes(searchQuery);
-    return matchesCategory && matchesSearch;
+    const matchesCat = selectedCategory === 'All' || p.category === selectedCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.barcode?.includes(searchQuery);
+    return matchesCat && matchesSearch;
   });
 
   const handleCreateProduct = (e) => {
     e.preventDefault();
     if (!name || !price) return;
-
     addProduct({
-      name,
-      category,
-      price: Number(price),
+      name, category, price: Number(price),
       costPrice: costPrice ? Number(costPrice) : Number(price) * 0.7,
-      stock: Number(stock) || 10,
-      minStock: 5,
-      image,
-      description: 'Standard retail SKU added via CEO inventory console.'
+      stock: Number(stock) || 10, minStock: 5, image,
+      description: 'Added via CEO inventory console.'
     });
-
-    setName('');
-    setPrice('');
-    setCostPrice('');
-    setStock('20');
+    setName(''); setPrice(''); setCostPrice(''); setStock('20');
     setShowAddModal(false);
   };
 
+  const handleAiScan = (mode) => {
+    setAiProcessing(true);
+    setAiResult(null);
+    setTimeout(() => {
+      setAiProcessing(false);
+      setAiResult({
+        name: mode === 'invoice' ? 'Synthetic Engine Oil 5L (Mobil 1)' : 'Premium Brake Disc Set',
+        sku: 'SKU-AI-' + Math.floor(Math.random() * 9000 + 1000),
+        stock: mode === 'invoice' ? 24 : 8,
+        price: mode === 'invoice' ? 4200 : 12500,
+        description: 'AI-matched from product database. Verified against distributor catalog.',
+        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&auto=format&fit=crop'
+      });
+    }, 2000);
+  };
+
+  const confirmAiProduct = () => {
+    if (!aiResult) return;
+    addProduct({ name: aiResult.name, price: aiResult.price, stock: aiResult.stock, category: 'Auto Parts', sku: aiResult.sku });
+    setAiResult(null);
+    setShowAddModal(false);
+    addToast('SKU Added', `${aiResult.name} added to inventory.`, 'success');
+  };
+
+  const inputStyle = {
+    background: 'var(--sunken)', border: '1px solid rgba(var(--lineRGB),0.12)',
+    color: 'var(--fg)', borderRadius: '10px', padding: '8px 12px', fontSize: '12px', width: '100%', outline: 'none'
+  };
+
+  const lowStockCount = products.filter(p => p.stock <= 5).length;
+
   return (
     <div className="space-y-6">
-      {/* Header & Add Action */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
+      {/* Header */}
+      <div className="rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <Package className="w-5 h-5 text-blue-600" />
+          <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: 'var(--fg)' }}>
+            <Package className="w-5 h-5" style={{ color: 'var(--acc)' }} />
             Stock & Inventory Control
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Real-time multi-branch stock levels, reorder thresholds & profit margins
+          <p className="text-xs mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+            Real-time stock levels, AI-assisted inventory & profit margins
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-sm transition"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add New Product SKU</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {lowStockCount > 0 && (
+            <span className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1"
+              style={{ background: 'rgba(255,138,138,0.15)', color: 'var(--bad)', border: '1px solid rgba(255,138,138,0.25)' }}>
+              <AlertTriangle className="w-3 h-3" />
+              {lowStockCount} Low Stock
+            </span>
+          )}
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="px-4 py-2.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition hover:opacity-90"
+            style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
+          >
+            <Plus className="w-4 h-4" />
+            Add Product SKU
+          </button>
+        </div>
       </div>
 
-      {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-        {/* Search input */}
-        <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+      {/* Search + Filter */}
+      <div className="rounded-2xl border p-4 flex flex-col sm:flex-row items-center gap-3"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+        <div className="relative w-full sm:w-72">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'rgba(var(--fgRGB),0.4)' }} />
+          <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search by SKU name, barcode..."
-            className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-          />
+            style={{ ...inputStyle, paddingLeft: '36px' }} />
         </div>
 
-        {/* Categories */}
         <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto">
           {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition ${
-                selectedCategory === cat
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
+            <button key={cat} onClick={() => setSelectedCategory(cat)}
+              className="px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition"
+              style={{
+                background: selectedCategory === cat ? 'var(--acc)' : 'var(--raise)',
+                color: selectedCategory === cat ? 'var(--onAcc)' : 'rgba(var(--fgRGB),0.6)',
+                border: '1px solid rgba(var(--lineRGB),0.08)'
+              }}>
               {cat}
             </button>
           ))}
@@ -115,62 +133,67 @@ export const CeoInventory = () => {
       </div>
 
       {/* Inventory Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="rounded-2xl border overflow-hidden" style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider font-semibold">
-              <tr>
-                <th className="py-3 px-4">Product Details</th>
-                <th className="py-3 px-4">Category</th>
+            <thead>
+              <tr className="border-b text-[10px] font-bold uppercase tracking-wider"
+                style={{ background: 'var(--raise)', borderColor: 'rgba(var(--lineRGB),0.08)', color: 'rgba(var(--fgRGB),0.4)' }}>
+                <th className="py-3 px-4">Product</th>
+                <th className="py-3 px-4 hidden sm:table-cell">Category</th>
                 <th className="py-3 px-4">Selling Price</th>
-                <th className="py-3 px-4">Cost Price / Margin</th>
+                <th className="py-3 px-4 hidden md:table-cell">Cost / Margin</th>
                 <th className="py-3 px-4">Stock Level</th>
-                <th className="py-3 px-4 text-right">Quick Restock</th>
+                <th className="py-3 px-4 text-right">Restock</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {filteredProducts.map(prod => {
                 const isLowStock = prod.stock <= 5;
-                const margin = prod.price > 0 ? (((prod.price - (prod.costPrice || prod.price * 0.7)) / prod.price) * 100).toFixed(0) : 0;
-
+                const margin = prod.price > 0
+                  ? (((prod.price - (prod.costPrice || prod.price * 0.7)) / prod.price) * 100).toFixed(0)
+                  : 0;
                 return (
-                  <tr key={prod.id} className="hover:bg-slate-50/60 transition">
-                    <td className="py-3 px-4">
+                  <tr key={prod.id} className="border-b transition" style={{ borderColor: 'rgba(var(--lineRGB),0.05)' }}>
+                    <td className="py-3.5 px-4">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={prod.image}
-                          alt={prod.name}
-                          className="w-10 h-10 rounded-xl object-cover border border-slate-200 shrink-0"
-                        />
+                        <img src={prod.image} alt={prod.name} className="w-10 h-10 rounded-xl object-cover shrink-0"
+                          style={{ border: '1px solid rgba(var(--lineRGB),0.1)' }} />
                         <div>
-                          <div className="font-bold text-slate-900 text-xs">{prod.name}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">Barcode: {prod.barcode}</div>
+                          <div className="font-bold" style={{ color: 'var(--fg)' }}>{prod.name}</div>
+                          <div className="text-[10px] font-mono" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>
+                            {prod.barcode || prod.sku || 'SKU-XXXXX'}
+                          </div>
                         </div>
                       </div>
                     </td>
 
-                    <td className="py-3 px-4">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700">
+                    <td className="py-3.5 px-4 hidden sm:table-cell">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{ background: 'rgba(var(--lineRGB),0.08)', color: 'rgba(var(--fgRGB),0.7)' }}>
                         {prod.category}
                       </span>
                     </td>
 
-                    <td className="py-3 px-4 font-black text-slate-900 font-mono">
+                    <td className="py-3.5 px-4 font-black font-mono" style={{ color: 'var(--fg)' }}>
                       ${prod.price.toFixed(2)}
                     </td>
 
-                    <td className="py-3 px-4 text-slate-600">
-                      <div className="font-mono">${(prod.costPrice || prod.price * 0.7).toFixed(2)}</div>
-                      <div className="text-[10px] text-emerald-600 font-bold">{margin}% margin</div>
+                    <td className="py-3.5 px-4 hidden md:table-cell">
+                      <div className="font-mono" style={{ color: 'rgba(var(--fgRGB),0.6)' }}>
+                        ${(prod.costPrice || prod.price * 0.7).toFixed(2)}
+                      </div>
+                      <div className="text-[10px] font-bold" style={{ color: 'var(--ok)' }}>{margin}% margin</div>
                     </td>
 
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2">
-                        <span className={`font-black font-mono text-sm ${isLowStock ? 'text-rose-600' : 'text-slate-900'}`}>
-                          {prod.stock} units
+                        <span className="font-black font-mono text-sm" style={{ color: isLowStock ? 'var(--bad)' : 'var(--fg)' }}>
+                          {prod.stock}
                         </span>
                         {isLowStock && (
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-800">
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-md text-[9px] font-bold"
+                            style={{ background: 'rgba(255,138,138,0.15)', color: 'var(--bad)' }}>
                             <AlertTriangle className="w-2.5 h-2.5" />
                             Low
                           </span>
@@ -178,12 +201,12 @@ export const CeoInventory = () => {
                       </div>
                     </td>
 
-                    <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={() => restockProduct(prod.id, 10)}
-                        className="px-2.5 py-1 rounded-lg border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold transition"
-                      >
-                        +10 Units
+                    <td className="py-3.5 px-4 text-right">
+                      <button onClick={() => restockProduct(prod.id, 10)}
+                        className="px-2.5 py-1 rounded-lg text-xs font-semibold transition hover:opacity-80 flex items-center gap-1 ml-auto"
+                        style={{ background: 'var(--accSoft)', color: 'var(--acc)', border: '1px solid rgba(255,106,19,0.2)' }}>
+                        <RefreshCw className="w-3 h-3" />
+                        +10
                       </button>
                     </td>
                   </tr>
@@ -196,118 +219,149 @@ export const CeoInventory = () => {
 
       {/* Add Product Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 text-slate-900 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          style={{ background: 'rgba(var(--bgRGB),0.85)', backdropFilter: 'blur(8px)' }}>
+          <div className="rounded-3xl max-w-md w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto"
+            style={{ background: 'var(--card)', border: '1px solid rgba(var(--lineRGB),0.12)' }}>
+            <div className="flex items-center justify-between pb-4 mb-4 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-blue-100 text-blue-600">
+                <div className="p-2 rounded-xl" style={{ background: 'var(--accSoft)', color: 'var(--acc)' }}>
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-base">Add New SKU to Catalog</h3>
-                  <p className="text-xs text-slate-500">Item will sync across all clerk POS terminals</p>
+                  <h3 className="font-bold text-base" style={{ color: 'var(--fg)' }}>Add New SKU</h3>
+                  <p className="text-xs" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>Syncs across all clerk POS terminals</p>
                 </div>
               </div>
-              <button
-                onClick={() => setShowAddModal(false)}
-                className="text-slate-400 hover:text-slate-600"
-              >
+              <button onClick={() => { setShowAddModal(false); setAiResult(null); setAiProcessing(false); }}
+                style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateProduct} className="py-4 space-y-4 text-xs">
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Product Title</label>
-                <input
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Wireless Noise Cancelling Earbuds"
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Category</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                  >
-                    <option>Electronics</option>
-                    <option>Clothing</option>
-                    <option>Food</option>
-                    <option>Beverages</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Initial Stock</label>
-                  <input
-                    type="number"
-                    value={stock}
-                    onChange={(e) => setStock(e.target.value)}
-                    placeholder="25"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Retail Selling Price ($)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    placeholder="49.99"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                  />
-                </div>
-                <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Cost Price ($)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={costPrice}
-                    onChange={(e) => setCostPrice(e.target.value)}
-                    placeholder="30.00"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1">Product Photo URL</label>
-                <input
-                  type="url"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
-                />
-              </div>
-
-              <div className="pt-2 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-xs"
-                >
-                  Cancel
+            {/* Mode Switcher */}
+            <div className="flex gap-2 mb-4 p-1 rounded-xl" style={{ background: 'var(--raise)' }}>
+              {['manual', 'ai'].map(m => (
+                <button key={m} onClick={() => { setAddMode(m); setAiResult(null); setAiProcessing(false); }}
+                  className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition"
+                  style={{ background: addMode === m ? 'var(--acc)' : 'transparent', color: addMode === m ? 'var(--onAcc)' : 'rgba(var(--fgRGB),0.6)' }}>
+                  {m === 'manual' ? '✏️ Manual Entry' : '✨ AI Photo / Invoice'}
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-sm"
-                >
-                  Save & Publish SKU
-                </button>
+              ))}
+            </div>
+
+            {addMode === 'ai' ? (
+              <div className="space-y-3">
+                <p className="text-xs" style={{ color: 'rgba(var(--fgRGB),0.6)' }}>
+                  AI will auto-fill product name, description & image from the internet.
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'Photo (1 item)', icon: Camera, mode: 'photo' },
+                    { label: 'Photo Shelf (5-10)', icon: Camera, mode: 'shelf' },
+                    { label: 'Invoice OCR', icon: Sparkles, mode: 'invoice' },
+                    { label: 'Manual Entry', icon: Package, mode: 'switch_manual' }
+                  ].map(opt => {
+                    const Icon = opt.icon;
+                    return (
+                      <button key={opt.mode}
+                        onClick={() => opt.mode === 'switch_manual' ? setAddMode('manual') : handleAiScan(opt.mode)}
+                        className="p-3 rounded-xl text-xs font-semibold text-center transition hover:opacity-80"
+                        style={{ background: 'var(--raise)', border: '1px solid rgba(var(--lineRGB),0.1)', color: 'rgba(var(--fgRGB),0.7)' }}>
+                        <Icon className="w-5 h-5 mx-auto mb-1" style={{ color: 'var(--acc)' }} />
+                        {opt.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {aiProcessing && (
+                  <div className="flex items-center gap-2 p-3 rounded-xl" style={{ background: 'var(--accSoft)' }}>
+                    <div className="w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: 'var(--acc)', borderTopColor: 'transparent' }} />
+                    <span className="text-xs font-semibold" style={{ color: 'var(--acc)' }}>AI analyzing image & fetching product data...</span>
+                  </div>
+                )}
+
+                {aiResult && (
+                  <div className="rounded-xl p-3 space-y-2" style={{ background: 'var(--raise)', border: '1px solid rgba(var(--lineRGB),0.1)' }}>
+                    <div className="flex items-center gap-3">
+                      <img src={aiResult.image} alt={aiResult.name} className="w-12 h-12 rounded-lg object-cover" />
+                      <div>
+                        <div className="font-bold text-xs" style={{ color: 'var(--fg)' }}>{aiResult.name}</div>
+                        <div className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>{aiResult.sku}</div>
+                        <div className="text-[10px]" style={{ color: 'var(--ok)' }}>
+                          ${aiResult.price} · Stock: {aiResult.stock}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.55)' }}>{aiResult.description}</p>
+                    <div className="flex gap-2 pt-1">
+                      <button onClick={confirmAiProduct}
+                        className="flex-1 py-2 rounded-xl text-xs font-bold transition hover:opacity-90"
+                        style={{ background: 'var(--ok)', color: 'var(--bg)' }}>
+                        ✓ Confirm & Add SKU
+                      </button>
+                      <button onClick={() => setAiResult(null)}
+                        className="py-2 px-3 rounded-xl text-xs font-bold"
+                        style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+                        Rescan
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleCreateProduct} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Product Title</label>
+                  <input type="text" required value={name} onChange={e => setName(e.target.value)}
+                    placeholder="e.g. Premium Brake Disc Set" style={inputStyle} />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Category</label>
+                    <select value={category} onChange={e => setCategory(e.target.value)} style={inputStyle}>
+                      <option>Electronics</option>
+                      <option>Clothing</option>
+                      <option>Food</option>
+                      <option>Beverages</option>
+                      <option>Auto Parts</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Initial Stock</label>
+                    <input type="number" value={stock} onChange={e => setStock(e.target.value)} placeholder="25" style={inputStyle} />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Retail Price ($)</label>
+                    <input type="number" step="0.01" required value={price} onChange={e => setPrice(e.target.value)}
+                      placeholder="49.99" style={inputStyle} />
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Cost Price ($)</label>
+                    <input type="number" step="0.01" value={costPrice} onChange={e => setCostPrice(e.target.value)}
+                      placeholder="30.00" style={inputStyle} />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end gap-2">
+                  <button type="button" onClick={() => setShowAddModal(false)}
+                    className="px-4 py-2 rounded-xl font-semibold transition hover:opacity-80"
+                    style={{ border: '1px solid rgba(var(--lineRGB),0.15)', color: 'rgba(var(--fgRGB),0.7)' }}>
+                    Cancel
+                  </button>
+                  <button type="submit"
+                    className="px-4 py-2 rounded-xl font-semibold transition hover:opacity-90"
+                    style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}>
+                    Save & Publish SKU
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}

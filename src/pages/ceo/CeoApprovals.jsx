@@ -1,22 +1,12 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
-  CheckSquare,
-  CheckCircle2,
-  XCircle,
-  AlertTriangle,
-  Clock,
-  User,
-  CreditCard,
-  DollarSign,
-  ChevronRight,
-  X,
-  ShieldAlert
+  CheckSquare, CheckCircle2, XCircle, AlertTriangle,
+  X, ShieldAlert
 } from 'lucide-react';
 
 export const CeoApprovals = () => {
-  const { transactions, approveTransaction, rejectTransaction, addToast } = useApp();
-  const [selectedTxn, setSelectedTxn] = useState(null);
+  const { transactions, approveTransaction, rejectTransaction } = useApp();
   const [rejectModalTxn, setRejectModalTxn] = useState(null);
   const [rejectReason, setRejectReason] = useState('Price discount exceeds authorized threshold');
 
@@ -30,104 +20,117 @@ export const CeoApprovals = () => {
     setRejectModalTxn(null);
   };
 
+  const inputStyle = {
+    background: 'var(--sunken)',
+    border: '1px solid rgba(var(--lineRGB),0.12)',
+    color: 'var(--fg)',
+    borderRadius: '10px',
+    padding: '8px 12px',
+    fontSize: '12px',
+    width: '100%',
+    outline: 'none'
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div>
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <CheckSquare className="w-5 h-5 text-amber-500" />
+          <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: 'var(--fg)' }}>
+            <CheckSquare className="w-5 h-5" style={{ color: 'var(--warn)' }} />
             Transaction Approval Queue
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Store CEO authorization for high-ticket purchases (&gt; $800) and clerk price overrides
+          <p className="text-xs mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+            Patron/Manager authorization for high-value purchases & price overrides
           </p>
         </div>
 
-        <span className="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold w-fit">
+        <span className="px-3 py-1.5 rounded-xl text-xs font-bold w-fit"
+          style={{ background: 'rgba(255,183,3,0.15)', color: 'var(--warn)', border: '1px solid rgba(255,183,3,0.25)' }}>
           {pendingTransactions.length} Pending Actions
         </span>
       </div>
 
-      {/* Pending Items Grid */}
+      {/* Pending Items */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-          Awaiting CEO Decision
-        </h3>
+        <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>
+          Awaiting Authorization Decision
+        </div>
 
         {pendingTransactions.length === 0 ? (
-          <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto">
+          <div className="rounded-2xl border p-8 text-center space-y-3" style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+            <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto" style={{ background: 'rgba(87,217,163,0.15)', color: 'var(--ok)' }}>
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h4 className="font-bold text-sm text-slate-800">Queue is Clear!</h4>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              No orders currently pending store manager or CEO approval. You can place a high-value order in the Clerk POS App to test this queue.
+            <h4 className="font-bold text-sm" style={{ color: 'var(--fg)' }}>Queue is Clear!</h4>
+            <p className="text-xs max-w-sm mx-auto" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+              No orders currently pending authorization. Place a high-value order in the Clerk POS App to test this queue.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {pendingTransactions.map(txn => (
-              <div
-                key={txn.id}
-                className="bg-white p-5 rounded-2xl border-2 border-amber-400/80 shadow-md space-y-4 relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 bg-amber-500 text-slate-950 font-bold text-[10px] px-3 py-0.5 rounded-bl-xl uppercase tracking-wider">
+              <div key={txn.id} className="p-5 rounded-2xl space-y-4 relative overflow-hidden"
+                style={{ background: 'var(--card)', border: '2px solid rgba(255,183,3,0.5)' }}>
+                <div className="absolute top-0 right-0 px-3 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-bl-xl"
+                  style={{ background: 'var(--warn)', color: '#1a0e00' }}>
                   Needs Approval
                 </div>
 
                 <div className="flex items-start justify-between pr-24">
                   <div>
-                    <span className="font-mono font-black text-base text-slate-900">{txn.id}</span>
-                    <div className="text-xs text-slate-500 mt-0.5">
-                      Clerk: <strong className="text-slate-700">{txn.clerkName}</strong>
+                    <span className="font-mono font-black text-base" style={{ color: 'var(--fg)' }}>{txn.id}</span>
+                    <div className="text-xs mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+                      Clerk: <strong style={{ color: 'var(--fg)' }}>{txn.clerkName}</strong>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xl font-black text-blue-600 font-mono">
+                    <div className="text-xl font-black font-mono" style={{ color: 'var(--acc)' }}>
                       ${txn.total.toFixed(2)}
                     </div>
                   </div>
                 </div>
 
-                {/* Reason Banner */}
-                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs space-y-1">
-                  <div className="flex items-center gap-1.5 font-bold text-amber-900">
-                    <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+                {/* Reason */}
+                <div className="p-3 rounded-xl text-xs space-y-1" style={{ background: 'rgba(255,183,3,0.1)', border: '1px solid rgba(255,183,3,0.25)' }}>
+                  <div className="flex items-center gap-1.5 font-bold" style={{ color: 'var(--warn)' }}>
+                    <ShieldAlert className="w-4 h-4 shrink-0" />
                     <span>Trigger Reason:</span>
                   </div>
-                  <p className="text-amber-800 text-[11px] leading-relaxed">
+                  <p className="text-[11px] leading-relaxed" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>
                     {txn.approvalReason || 'High-value basket size exceeding standard limit'}
                   </p>
                 </div>
 
-                {/* Line Items Preview */}
-                <div className="border-t border-slate-100 pt-3 space-y-1 text-xs">
-                  <div className="text-[10px] uppercase font-bold text-slate-400">Order Contents:</div>
+                {/* Line Items */}
+                <div className="border-t pt-3 space-y-1 text-xs" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+                  <div className="text-[10px] uppercase font-bold" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>Order Contents:</div>
                   {txn.items?.map((it, idx) => (
-                    <div key={idx} className="flex justify-between text-slate-700">
+                    <div key={idx} className="flex justify-between" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>
                       <span>{it.qty}x {it.name}</span>
-                      <span className="font-mono font-semibold">${(it.price * it.qty).toFixed(2)}</span>
+                      <span className="font-mono font-semibold" style={{ color: 'var(--fg)' }}>${(it.price * it.qty).toFixed(2)}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Action Buttons */}
-                <div className="pt-2 flex items-center gap-2 border-t border-slate-100">
+                <div className="pt-2 flex items-center gap-2 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
                   <button
                     onClick={() => approveTransaction(txn.id)}
-                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition"
+                    className="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition hover:opacity-90"
+                    style={{ background: 'var(--ok)', color: 'var(--bg)' }}
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Approve Order</span>
+                    Approve Order
                   </button>
-
                   <button
                     onClick={() => setRejectModalTxn(txn)}
-                    className="flex-1 py-2.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center gap-1.5 transition"
+                    className="flex-1 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition hover:opacity-90"
+                    style={{ background: 'rgba(255,138,138,0.15)', color: 'var(--bad)', border: '1px solid rgba(255,138,138,0.3)' }}
                   >
                     <XCircle className="w-4 h-4" />
-                    <span>Reject</span>
+                    Reject
                   </button>
                 </div>
               </div>
@@ -136,40 +139,43 @@ export const CeoApprovals = () => {
         )}
       </div>
 
-      {/* History of Past Decisions */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-5 space-y-4">
-        <h3 className="font-bold text-base text-slate-900">Recent Authorization History</h3>
+      {/* Authorization History */}
+      <div className="rounded-2xl border p-5 space-y-4" style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+        <h3 className="font-bold text-base" style={{ color: 'var(--fg)' }}>Recent Authorization History</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="border-b border-slate-200 text-slate-400 font-semibold uppercase">
-              <tr>
-                <th className="py-2.5 px-3">Order ID</th>
-                <th className="py-2.5 px-3">Clerk</th>
-                <th className="py-2.5 px-3">Customer</th>
-                <th className="py-2.5 px-3">Amount</th>
-                <th className="py-2.5 px-3">Decision</th>
-                <th className="py-2.5 px-3 text-right">Date</th>
+            <thead>
+              <tr className="border-b text-[10px] font-bold uppercase tracking-wider"
+                style={{ borderColor: 'rgba(var(--lineRGB),0.08)', color: 'rgba(var(--fgRGB),0.4)' }}>
+                <th className="py-2.5 px-2">Order ID</th>
+                <th className="py-2.5 px-2">Clerk</th>
+                <th className="py-2.5 px-2 hidden sm:table-cell">Customer</th>
+                <th className="py-2.5 px-2">Amount</th>
+                <th className="py-2.5 px-2">Decision</th>
+                <th className="py-2.5 px-2 text-right hidden sm:table-cell">Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {pastApprovals.map(t => (
-                <tr key={t.id} className="hover:bg-slate-50 transition">
-                  <td className="py-3 px-3 font-mono font-bold text-slate-900">{t.id}</td>
-                  <td className="py-3 px-3 text-slate-700">{t.clerkName}</td>
-                  <td className="py-3 px-3 text-slate-600">{t.customerName}</td>
-                  <td className="py-3 px-3 font-black text-slate-900 font-mono">${t.total.toFixed(2)}</td>
-                  <td className="py-3 px-3">
+                <tr key={t.id} className="border-b transition" style={{ borderColor: 'rgba(var(--lineRGB),0.05)' }}>
+                  <td className="py-3 px-2 font-mono font-bold" style={{ color: 'var(--acc)' }}>{t.id}</td>
+                  <td className="py-3 px-2 font-semibold" style={{ color: 'var(--fg)' }}>{t.clerkName}</td>
+                  <td className="py-3 px-2 hidden sm:table-cell" style={{ color: 'rgba(var(--fgRGB),0.6)' }}>{t.customerName}</td>
+                  <td className="py-3 px-2 font-black font-mono" style={{ color: 'var(--fg)' }}>${t.total.toFixed(2)}</td>
+                  <td className="py-3 px-2">
                     {t.status === 'Approved' ? (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                        Authorized by CEO
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold"
+                        style={{ background: 'rgba(87,217,163,0.15)', color: 'var(--ok)' }}>
+                        Authorized
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold"
+                        style={{ background: 'rgba(255,138,138,0.15)', color: 'var(--bad)' }}>
                         Rejected
                       </span>
                     )}
                   </td>
-                  <td className="py-3 px-3 text-right text-slate-400 font-mono">{t.date}</td>
+                  <td className="py-3 px-2 text-right font-mono hidden sm:table-cell" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>{t.date}</td>
                 </tr>
               ))}
             </tbody>
@@ -179,31 +185,26 @@ export const CeoApprovals = () => {
 
       {/* Rejection Modal */}
       {rejectModalTxn && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-5 text-slate-900 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <h3 className="font-bold text-base text-rose-600 flex items-center gap-1.5">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4"
+          style={{ background: 'rgba(var(--bgRGB),0.85)', backdropFilter: 'blur(8px)' }}>
+          <div className="rounded-3xl max-w-sm w-full p-5 shadow-2xl"
+            style={{ background: 'var(--card)', border: '1px solid rgba(var(--lineRGB),0.12)' }}>
+            <div className="flex items-center justify-between pb-3 mb-4 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+              <h3 className="font-bold text-base flex items-center gap-1.5" style={{ color: 'var(--bad)' }}>
                 <XCircle className="w-5 h-5" />
-                Reject Transaction {rejectModalTxn.id}
+                Reject {rejectModalTxn.id}
               </h3>
-              <button
-                onClick={() => setRejectModalTxn(null)}
-                className="text-slate-400 hover:text-slate-700"
-              >
+              <button onClick={() => setRejectModalTxn(null)} style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleConfirmReject} className="py-4 space-y-4 text-xs">
+            <form onSubmit={handleConfirmReject} className="space-y-4 text-xs">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Reason for Rejection (sent to Clerk till):
+                <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>
+                  Reason for Rejection (sent to Clerk terminal):
                 </label>
-                <select
-                  value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600"
-                >
+                <select value={rejectReason} onChange={e => setRejectReason(e.target.value)} style={inputStyle}>
                   <option>Price discount exceeds authorized threshold</option>
                   <option>Customer identity verification failed</option>
                   <option>Suspected fraudulent payment transaction</option>
@@ -212,17 +213,14 @@ export const CeoApprovals = () => {
               </div>
 
               <div className="pt-2 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRejectModalTxn(null)}
-                  className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold"
-                >
+                <button type="button" onClick={() => setRejectModalTxn(null)}
+                  className="px-4 py-2 rounded-xl font-semibold transition hover:opacity-80"
+                  style={{ border: '1px solid rgba(var(--lineRGB),0.15)', color: 'rgba(var(--fgRGB),0.7)' }}>
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-semibold shadow-sm"
-                >
+                <button type="submit"
+                  className="px-4 py-2 rounded-xl font-semibold transition hover:opacity-90"
+                  style={{ background: 'var(--bad)', color: 'white' }}>
                   Confirm Rejection
                 </button>
               </div>

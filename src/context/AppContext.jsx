@@ -6,6 +6,16 @@ import {
   INITIAL_TENANTS,
   INITIAL_FEATURE_FLAGS
 } from '../data/mockData';
+import {
+  STORE_MANAGERS,
+  INITIAL_TEAM_CLERKS,
+  INITIAL_TASKS,
+  INITIAL_INVENTORY_REQUESTS,
+  INITIAL_FIELD_REQUESTS,
+  INITIAL_AI_TICKETS,
+  INITIAL_CHAT_MESSAGES,
+  INITIAL_PRICING_SETTINGS
+} from '../data/teamData';
 import { REGIONS, GLOBAL_COUNTRIES, BN_DIGITS } from '../data/regionConfig';
 
 const AppContext = createContext();
@@ -45,6 +55,47 @@ export const AppProvider = ({ children }) => {
   const [currentClerk, setCurrentClerk] = useState(() => {
     const saved = localStorage.getItem('momotill_current_clerk');
     return saved ? JSON.parse(saved) : INITIAL_CLERKS[0]; // Amara by default for quick presentation demo
+  });
+
+  // Store Management & Team Structure (1 Patron, 2 Managers, 6 Clerks in 2 Teams)
+  const [managers, setManagers] = useState(() => {
+    const saved = localStorage.getItem('momotill_managers');
+    return saved ? JSON.parse(saved) : STORE_MANAGERS;
+  });
+
+  const [teamClerks, setTeamClerks] = useState(() => {
+    const saved = localStorage.getItem('momotill_team_clerks');
+    return saved ? JSON.parse(saved) : INITIAL_TEAM_CLERKS;
+  });
+
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('momotill_tasks');
+    return saved ? JSON.parse(saved) : INITIAL_TASKS;
+  });
+
+  const [inventoryRequests, setInventoryRequests] = useState(() => {
+    const saved = localStorage.getItem('momotill_inv_requests');
+    return saved ? JSON.parse(saved) : INITIAL_INVENTORY_REQUESTS;
+  });
+
+  const [fieldRequests, setFieldRequests] = useState(() => {
+    const saved = localStorage.getItem('momotill_field_requests');
+    return saved ? JSON.parse(saved) : INITIAL_FIELD_REQUESTS;
+  });
+
+  const [aiTickets, setAiTickets] = useState(() => {
+    const saved = localStorage.getItem('momotill_ai_tickets');
+    return saved ? JSON.parse(saved) : INITIAL_AI_TICKETS;
+  });
+
+  const [chatMessages, setChatMessages] = useState(() => {
+    const saved = localStorage.getItem('momotill_chat_msgs');
+    return saved ? JSON.parse(saved) : INITIAL_CHAT_MESSAGES;
+  });
+
+  const [pricingSettings, setPricingSettings] = useState(() => {
+    const saved = localStorage.getItem('momotill_pricing');
+    return saved ? JSON.parse(saved) : INITIAL_PRICING_SETTINGS;
   });
 
   const [impersonatedUser, setImpersonatedUser] = useState(null);
@@ -417,6 +468,143 @@ export const AppProvider = ({ children }) => {
     addToast('Data Reset', 'All demonstration state reset to pristine defaults.', 'success');
   };
 
+  // Store Team & Task Actions
+  const assignTask = (taskData) => {
+    const newTask = {
+      id: 'tsk-' + Date.now(),
+      status: 'To Do',
+      createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      ...taskData
+    };
+    setTasks(prev => [newTask, ...prev]);
+    playSoundEffect('success');
+    addToast('Task Assigned', `Assigned to ${taskData.assignedTo} (${taskData.team})`, 'success');
+    return newTask;
+  };
+
+  const updateTaskStatus = (taskId, newStatus, proofPhoto = null) => {
+    setTasks(prev =>
+      prev.map(t =>
+        t.id === taskId
+          ? {
+              ...t,
+              status: newStatus,
+              proofPhoto: proofPhoto || t.proofPhoto,
+              completedAt: newStatus === 'Completed' ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t.completedAt
+            }
+          : t
+      )
+    );
+    playSoundEffect(newStatus === 'Completed' ? 'success' : 'add');
+    addToast('Task Updated', `Task marked as "${newStatus}"`, 'info');
+  };
+
+  // Inventory Requests Actions (Clerks propose, Managers & Patron approve)
+  const submitInventoryRequest = (reqData) => {
+    const newReq = {
+      id: 'REQ-INV-' + Math.floor(100 + Math.random() * 900),
+      status: 'Pending',
+      timestamp: 'Just now',
+      ...reqData
+    };
+    setInventoryRequests(prev => [newReq, ...prev]);
+    playSoundEffect('success');
+    addToast('Stock Update Requested', 'Submitted for Manager & Patron approval', 'info');
+    return newReq;
+  };
+
+  const approveInventoryRequest = (reqId) => {
+    const req = inventoryRequests.find(r => r.id === reqId);
+    if (!req) return;
+    setInventoryRequests(prev =>
+      prev.map(r => (r.id === reqId ? { ...r, status: 'Approved' } : r))
+    );
+    // Update product stock in catalog if matching item exists
+    setProducts(prev =>
+      prev.map(p => {
+        if (p.name.toLowerCase() === req.productName.toLowerCase() || p.sku === req.sku) {
+          return { ...p, stock: Number(req.requestedStock) };
+        }
+        return p;
+      })
+    );
+    playSoundEffect('success');
+    addToast('Inventory Approved', `Stock for ${req.productName} updated to ${req.requestedStock} units`, 'success');
+  };
+
+  const rejectInventoryRequest = (reqId, reason = 'Discrepancy in count') => {
+    setInventoryRequests(prev =>
+      prev.map(r => (r.id === reqId ? { ...r, status: 'Rejected', rejectionReason: reason } : r))
+    );
+    addToast('Request Rejected', `Inventory request rejected: ${reason}`, 'warning');
+  };
+
+  // Field Requests Actions (Escalated to Patron)
+  const submitFieldRequest = (reqData) => {
+    const newReq = {
+      id: 'FLD-' + Math.floor(100 + Math.random() * 900),
+      status: 'Pending',
+      time: 'Just now',
+      ...reqData
+    };
+    setFieldRequests(prev => [newReq, ...prev]);
+    playSoundEffect('success');
+    addToast('Field Request Escalated', 'Sent to Patron approval queue', 'info');
+  };
+
+  const approveFieldRequest = (reqId) => {
+    setFieldRequests(prev =>
+      prev.map(r => (r.id === reqId ? { ...r, status: 'Approved' } : r))
+    );
+    playSoundEffect('success');
+    addToast('Field Request Approved', 'Action authorized by Patron', 'success');
+  };
+
+  const rejectFieldRequest = (reqId) => {
+    setFieldRequests(prev =>
+      prev.map(r => (r.id === reqId ? { ...r, status: 'Rejected' } : r))
+    );
+    addToast('Field Request Rejected', 'Declined by Patron', 'warning');
+  };
+
+  // AI Tickets Actions
+  const resolveAiTicket = (ticketId, actionTaken = 'Auto-reorder initiated') => {
+    setAiTickets(prev =>
+      prev.map(t => (t.id === ticketId ? { ...t, status: 'Resolved', actionTaken } : t))
+    );
+    playSoundEffect('success');
+    addToast('AI Ticket Resolved', actionTaken, 'success');
+  };
+
+  // Chat Actions
+  const sendChatMessage = (msgData) => {
+    const newMsg = {
+      id: 'msg-' + Date.now(),
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      ...msgData
+    };
+    setChatMessages(prev => [...prev, newMsg]);
+    playSoundEffect('add');
+    return newMsg;
+  };
+
+  // Pricing & Commissions Settings
+  const updatePricingSettings = (newSettings) => {
+    setPricingSettings(prev => ({ ...prev, ...newSettings }));
+    addToast('Pricing Updated', 'Store markup & commission settings updated', 'success');
+  };
+
+  const reassignClerkTeam = (clerkId, newTeam, newManagerId, newManagerName) => {
+    setTeamClerks(prev =>
+      prev.map(c =>
+        c.id === clerkId
+          ? { ...c, team: newTeam, managerId: newManagerId, managerName: newManagerName }
+          : c
+      )
+    );
+    addToast('Team Reassigned', `Clerk moved to ${newTeam} under ${newManagerName}`, 'info');
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -467,7 +655,30 @@ export const AppProvider = ({ children }) => {
         language,
         setLanguage,
         resetAllData,
-        playSoundEffect
+        playSoundEffect,
+        // Team, Roles, Tasks & Approvals
+        managers,
+        setManagers,
+        teamClerks,
+        setTeamClerks,
+        tasks,
+        assignTask,
+        updateTaskStatus,
+        inventoryRequests,
+        submitInventoryRequest,
+        approveInventoryRequest,
+        rejectInventoryRequest,
+        fieldRequests,
+        submitFieldRequest,
+        approveFieldRequest,
+        rejectFieldRequest,
+        aiTickets,
+        resolveAiTicket,
+        chatMessages,
+        sendChatMessage,
+        pricingSettings,
+        updatePricingSettings,
+        reassignClerkTeam
       }}
     >
       {children}
