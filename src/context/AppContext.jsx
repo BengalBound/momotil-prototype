@@ -14,7 +14,8 @@ import {
   INITIAL_FIELD_REQUESTS,
   INITIAL_AI_TICKETS,
   INITIAL_CHAT_MESSAGES,
-  INITIAL_PRICING_SETTINGS
+  INITIAL_PRICING_SETTINGS,
+  INITIAL_AUTO_PRODUCTS
 } from '../data/teamData';
 import { REGIONS, GLOBAL_COUNTRIES, BN_DIGITS } from '../data/regionConfig';
 
@@ -24,7 +25,19 @@ export const AppProvider = ({ children }) => {
   // Load state from localStorage or initial data
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem('momotill_products');
-    return saved ? JSON.parse(saved) : INITIAL_PRODUCTS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const hasAuto = parsed.some(p => p.id === 'prod-auto-1' || p.name === 'Bosch Brake Pads');
+        if (!hasAuto) {
+          return [...INITIAL_AUTO_PRODUCTS, ...parsed];
+        }
+        return parsed;
+      } catch (e) {
+        return [...INITIAL_AUTO_PRODUCTS, ...INITIAL_PRODUCTS];
+      }
+    }
+    return [...INITIAL_AUTO_PRODUCTS, ...INITIAL_PRODUCTS];
   });
 
   const [clerks, setClerks] = useState(() => {
@@ -131,6 +144,14 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('bound_lang', language);
   }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('momotill_products', JSON.stringify(products));
+  }, [products]);
+
+  useEffect(() => {
+    localStorage.setItem('momotill_pricing', JSON.stringify(pricingSettings));
+  }, [pricingSettings]);
 
   const toggleTheme = () => {
     setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
@@ -594,6 +615,22 @@ export const AppProvider = ({ children }) => {
     addToast('Pricing Updated', 'Store markup & commission settings updated', 'success');
   };
 
+  const updateProductPriceAndCommission = (productId, updates) => {
+    setProducts(prev =>
+      prev.map(p => {
+        if (p.id === productId) {
+          return {
+            ...p,
+            ...(updates.price !== undefined ? { price: Number(updates.price) } : {}),
+            ...(updates.costPrice !== undefined ? { costPrice: Number(updates.costPrice) } : {}),
+            ...(updates.commissionPercent !== undefined ? { commissionPercent: Number(updates.commissionPercent) } : {})
+          };
+        }
+        return p;
+      })
+    );
+  };
+
   const reassignClerkTeam = (clerkId, newTeam, newManagerId, newManagerName) => {
     setTeamClerks(prev =>
       prev.map(c =>
@@ -678,6 +715,7 @@ export const AppProvider = ({ children }) => {
         sendChatMessage,
         pricingSettings,
         updatePricingSettings,
+        updateProductPriceAndCommission,
         reassignClerkTeam
       }}
     >

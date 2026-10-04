@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useApp } from '../../../context/AppContext';
 import {
   CheckCircle2, XCircle, Send,
@@ -133,6 +133,7 @@ export const BoundManagerPatronApp = () => {
     sendChatMessage,
     pricingSettings,
     updatePricingSettings,
+    updateProductPriceAndCommission,
     reassignClerkTeam
   } = useApp();
 
@@ -243,6 +244,54 @@ export const BoundManagerPatronApp = () => {
         image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&auto=format&fit=crop'
       });
     }, 2000);
+  };
+
+  // Helper to format currency like "16 500 FCFA" (space separator)
+  const formatFCFA = (val) => {
+    if (val === undefined || val === null || isNaN(val)) return '0 FCFA';
+    const rounded = Math.round(Number(val));
+    const numStr = rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    return `${numStr} FCFA`;
+  };
+
+  // Pricing & Commission Product List (Prioritize Auto Parts / high margin items)
+  const pricingProductList = useMemo(() => {
+    return [...products].sort((a, b) => {
+      const aAuto = a.category === 'Auto Parts' || a.id.includes('auto') ? 1 : 0;
+      const bAuto = b.category === 'Auto Parts' || b.id.includes('auto') ? 1 : 0;
+      return bAuto - aAuto;
+    });
+  }, [products]);
+
+  // Dynamic Est. Monthly Profit calculation
+  const estMonthlyProfit = useMemo(() => {
+    return pricingProductList.reduce((sum, prod) => {
+      const cost = Number(prod.costPrice || 0);
+      const price = Number(prod.price || 0);
+      const commission = Number(prod.commissionPercent ?? 5);
+      const grossMargin = Math.max(0, price - cost);
+      const commissionAmount = grossMargin * (commission / 100);
+      const profitPerUnit = grossMargin - commissionAmount;
+      const units = prod.monthlyEstimate || 15;
+      return sum + (profitPerUnit * units);
+    }, 0);
+  }, [pricingProductList]);
+
+  const handleAdjustPrice = (productId, delta) => {
+    const prod = products.find(p => p.id === productId);
+    if (!prod) return;
+    const currentPrice = Number(prod.price || 0);
+    const minPrice = Number(prod.costPrice || 0);
+    const newPrice = Math.max(minPrice, currentPrice + delta);
+    updateProductPriceAndCommission(productId, { price: newPrice });
+  };
+
+  const handleAdjustCommission = (productId, delta) => {
+    const prod = products.find(p => p.id === productId);
+    if (!prod) return;
+    const currentComm = Number(prod.commissionPercent ?? 5);
+    const newComm = Math.min(50, Math.max(0, currentComm + delta));
+    updateProductPriceAndCommission(productId, { commissionPercent: newComm });
   };
 
   const confirmAiProduct = () => {
@@ -1113,10 +1162,129 @@ export const BoundManagerPatronApp = () => {
         {/* PATRON TAB 4: PRICING & COMMISSIONS */}
         {isPatron && selectedTab === 'pricing' && (
           <div className="space-y-4">
+            {/* Header */}
+            <div>
+              <h2 className="font-display font-black text-xl text-[var(--fg)] tracking-tight">
+                Pricing & commission
+              </h2>
+            </div>
+
+            {/* EST. MONTHLY PROFIT Card */}
+            <div className="p-4 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.08)] shadow-sm">
+              <div className="text-[10px] font-bold tracking-widest text-[rgba(var(--fgRGB),0.5)] uppercase">
+                EST. MONTHLY PROFIT
+              </div>
+              <div className="text-2xl font-black text-[#10B981] mt-1 tracking-tight">
+                {formatFCFA(estMonthlyProfit)}
+              </div>
+            </div>
+
+            {/* Product Cards List */}
+            <div className="space-y-3">
+              {pricingProductList.map(prod => {
+                const cost = Number(prod.costPrice || 0);
+                const price = Number(prod.price || 0);
+                const commission = Number(prod.commissionPercent ?? 5);
+                const grossMargin = Math.max(0, price - cost);
+                const commissionAmount = grossMargin * (commission / 100);
+                const profitPerUnit = Math.round(grossMargin - commissionAmount);
+
+                return (
+                  <div
+                    key={prod.id}
+                    className="p-4 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.08)] space-y-3 shadow-sm hover:border-[rgba(var(--lineRGB),0.16)] transition"
+                  >
+                    <h4 className="font-bold text-sm text-[var(--fg)]">
+                      {prod.name}
+                    </h4>
+
+                    <div className="grid grid-cols-3 gap-2 items-center">
+                      {/* COST */}
+                      <div className="space-y-1">
+                        <div className="text-[9px] font-bold tracking-widest text-[rgba(var(--fgRGB),0.5)] uppercase">
+                          COST
+                        </div>
+                        <div className="text-xs font-bold text-[var(--fg)]">
+                          {formatFCFA(cost)}
+                        </div>
+                      </div>
+
+                      {/* PRICE */}
+                      <div className="space-y-1 text-center">
+                        <div className="text-[9px] font-bold tracking-widest text-[rgba(var(--fgRGB),0.5)] uppercase">
+                          PRICE
+                        </div>
+                        <div className="flex items-center justify-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustPrice(prod.id, -100)}
+                            className="w-6 h-6 rounded-lg bg-[rgba(var(--fgRGB),0.06)] hover:bg-[rgba(var(--fgRGB),0.14)] border border-[rgba(var(--lineRGB),0.12)] flex items-center justify-center text-xs font-bold text-[var(--fg)] active:scale-90 transition cursor-pointer"
+                            title="Decrease price"
+                          >
+                            −
+                          </button>
+                          <div className="text-[11px] font-bold text-[var(--fg)] leading-tight px-1 text-center whitespace-nowrap">
+                            {formatFCFA(price)}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustPrice(prod.id, 100)}
+                            className="w-6 h-6 rounded-lg bg-[rgba(var(--fgRGB),0.06)] hover:bg-[rgba(var(--fgRGB),0.14)] border border-[rgba(var(--lineRGB),0.12)] flex items-center justify-center text-xs font-bold text-[var(--fg)] active:scale-90 transition cursor-pointer"
+                            title="Increase price"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* COMMISSION */}
+                      <div className="space-y-1 text-right">
+                        <div className="text-[9px] font-bold tracking-widest text-[rgba(var(--fgRGB),0.5)] uppercase">
+                          COMMISSION
+                        </div>
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustCommission(prod.id, -1)}
+                            className="w-6 h-6 rounded-lg bg-[rgba(var(--fgRGB),0.06)] hover:bg-[rgba(var(--fgRGB),0.14)] border border-[rgba(var(--lineRGB),0.12)] flex items-center justify-center text-xs font-bold text-[var(--fg)] active:scale-90 transition cursor-pointer"
+                            title="Decrease commission"
+                          >
+                            −
+                          </button>
+                          <div className="text-[11px] font-bold text-[var(--fg)] leading-tight px-1 min-w-[28px] text-center whitespace-nowrap">
+                            {commission}%
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleAdjustCommission(prod.id, 1)}
+                            className="w-6 h-6 rounded-lg bg-[rgba(var(--fgRGB),0.06)] hover:bg-[rgba(var(--fgRGB),0.14)] border border-[rgba(var(--lineRGB),0.12)] flex items-center justify-center text-xs font-bold text-[var(--fg)] active:scale-90 transition cursor-pointer"
+                            title="Increase commission"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PROFIT / UNIT */}
+                    <div className="pt-2.5 border-t border-[rgba(var(--lineRGB),0.06)] flex items-center justify-between">
+                      <span className="text-[9px] font-bold tracking-widest text-[rgba(var(--fgRGB),0.5)] uppercase">
+                        PROFIT / UNIT
+                      </span>
+                      <span className="text-xs font-bold text-[#10B981]">
+                        {formatFCFA(profitPerUnit)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Store Markup & Margin Rules (Collapsible Store Settings) */}
             <div className="p-4 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.08)] space-y-3">
-              <h4 className="font-display font-bold text-sm flex items-center gap-1.5 text-amber-500">
-                <Sliders className="w-4 h-4" />
-                <span>Store Markup & Margin Rules</span>
+              <h4 className="font-display font-bold text-xs uppercase tracking-wider text-[rgba(var(--fgRGB),0.5)] flex items-center gap-1.5">
+                <Sliders className="w-3.5 h-3.5 text-amber-500" />
+                <span>Global Store Markup & Approval Rules</span>
               </h4>
 
               <div>

@@ -365,3 +365,71 @@ export const INITIAL_PRICING_SETTINGS = {
   clerkCommissionRate: 3.5,
   approvalThreshold: 800
 };
+
+export const INITIAL_AUTO_PRODUCTS = [
+  {
+    id: "prod-auto-1",
+    name: "Bosch Brake Pads",
+    category: "Auto Parts",
+    costPrice: 14500,
+    price: 16500,
+    commissionPercent: 5,
+    monthlyEstimate: 18,
+    stock: 14,
+    minStock: 5,
+    barcode: "8806091234561",
+    description: "High-performance ceramic front brake pads for Toyota & Nissan."
+  },
+  {
+    id: "prod-auto-2",
+    name: "Toyota Oil Filter",
+    category: "Auto Parts",
+    costPrice: 2100,
+    price: 2500,
+    commissionPercent: 6,
+    monthlyEstimate: 65,
+    stock: 24,
+    minStock: 8,
+    barcode: "8806091234562",
+    description: "OEM genuine oil filter cartridge for Toyota Corolla & Hilux."
+  },
+  {
+    id: "prod-auto-3",
+    name: "Bougies NGK × 4",
+    category: "Auto Parts",
+    costPrice: 2000,
+    price: 2500,
+    commissionPercent: 4,
+    monthlyEstimate: 45,
+    stock: 35,
+    minStock: 10,
+    barcode: "8806091234563",
+    description: "Set of 4 Japanese standard spark plugs, copper core."
+  },
+  {
+    id: "prod-auto-4",
+    name: "Front Shock Absorbers × 2",
+    category: "Auto Parts",
+    costPrice: 7800,
+    price: 9600,
+    commissionPercent: 5,
+    monthlyEstimate: 10,
+    stock: 8,
+    minStock: 3,
+    barcode: "8806091234564",
+    description: "Heavy-duty twin-tube gas pressurized shock absorbers pair."
+  },
+  {
+    id: "prod-auto-5",
+    name: "Balais d'essuie-glace",
+    category: "Auto Parts",
+    costPrice: 1200,
+    price: 1800,
+    commissionPercent: 5,
+    monthlyEstimate: 1.6,
+    stock: 20,
+    minStock: 6,
+    barcode: "8806091234565",
+    description: "All-weather graphite coated wiper blades 22-inch."
+  }
+];
