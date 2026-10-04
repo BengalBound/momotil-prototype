@@ -28,7 +28,7 @@ export const AdminTenants = () => {
   const [ownerName, setOwnerName] = useState('');
   const [ownerEmail, setOwnerEmail] = useState('');
   const [plan, setPlan] = useState('Basic');
-  const [region, setRegion] = useState('Lagos, Nigeria');
+  const [region, setRegion] = useState('Abidjan, Côte d\'Ivoire');
 
   // Real-time subdomain check
   const cleanSubdomain = subdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -64,31 +64,67 @@ export const AdminTenants = () => {
   const getPlanBadge = (p) => {
     switch (p) {
       case 'Pro':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Pro ($99/mo)</span>;
+        return (
+          <span
+            className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
+            style={{ background: 'var(--accSoft)', color: 'var(--acc)', borderColor: 'rgba(var(--lineRGB),0.15)' }}
+          >
+            Pro ($99/mo)
+          </span>
+        );
       case 'Basic':
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30">Basic ($29/mo)</span>;
+        return (
+          <span
+            className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
+            style={{ background: 'rgba(37,99,235,0.12)', color: '#3B82F6', borderColor: 'rgba(37,99,235,0.25)' }}
+          >
+            Basic ($29/mo)
+          </span>
+        );
       default:
-        return <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">Free Tier</span>;
+        return (
+          <span
+            className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
+            style={{ background: 'var(--sunken)', color: 'rgba(var(--fgRGB),0.5)', borderColor: 'rgba(var(--lineRGB),0.1)' }}
+          >
+            Free Tier
+          </span>
+        );
     }
   };
 
+  const inputStyle = {
+    background: 'var(--sunken)',
+    border: '1px solid rgba(var(--lineRGB), 0.12)',
+    color: 'var(--fg)',
+    borderRadius: '12px',
+    padding: '8px 12px',
+    fontSize: '12px',
+    width: '100%',
+    outline: 'none'
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 select-none" style={{ color: 'var(--fg)' }}>
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+      <div
+        className="p-5 rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+      >
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-indigo-400" />
-            Tenant Organizations Management
+          <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: 'var(--fg)' }}>
+            <Building2 className="w-5 h-5 text-[var(--acc)]" />
+            <span>Tenant Organizations Management</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Provision, monitor, and regulate multi-tenant POS store instances
+          <p className="text-xs mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+            Provision, monitor, and regulate multi-tenant POS store instances on KVM4
           </p>
         </div>
 
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20 transition"
+          className="px-4 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
+          style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
         >
           <Plus className="w-4 h-4" />
           <span>Provision New Tenant</span>
@@ -96,31 +132,40 @@ export const AdminTenants = () => {
       </div>
 
       {/* Search and Summary */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-2xl">
+      <div
+        className="flex flex-col sm:flex-row items-center justify-between gap-3 border p-4 rounded-3xl"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+      >
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'rgba(var(--fgRGB),0.4)' }} />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search stores, subdomains, owner names..."
-            className="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+            style={{ ...inputStyle, paddingLeft: '34px' }}
           />
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-mono text-slate-400">
-          <span>Total Stores: <strong className="text-white">{tenants.length}</strong></span>
+        <div className="flex items-center gap-4 text-xs font-mono" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+          <span>Total Stores: <strong style={{ color: 'var(--fg)' }}>{tenants.length}</strong></span>
           <span>Active: <strong className="text-emerald-400">{tenants.filter(t => t.status === 'Active').length}</strong></span>
           <span>Suspended: <strong className="text-rose-400">{tenants.filter(t => t.status === 'Suspended').length}</strong></span>
         </div>
       </div>
 
-      {/* Tenants Table (Deliverable 3.A) */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      {/* Tenants Table */}
+      <div
+        className="border rounded-3xl overflow-hidden shadow-sm"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="bg-slate-950/70 border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider">
-              <tr>
+            <thead>
+              <tr
+                className="border-b text-[10px] font-bold uppercase tracking-wider"
+                style={{ background: 'var(--raise)', borderColor: 'rgba(var(--lineRGB),0.08)', color: 'rgba(var(--fgRGB),0.45)' }}
+              >
                 <th className="py-3 px-4">Store Name & Subdomain</th>
                 <th className="py-3 px-4">Owner & Region</th>
                 <th className="py-3 px-4">Subscription Plan</th>
@@ -130,26 +175,33 @@ export const AdminTenants = () => {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80">
+            <tbody>
               {filteredTenants.map(tenant => (
-                <tr key={tenant.id} className="hover:bg-slate-800/50 transition">
+                <tr
+                  key={tenant.id}
+                  className="border-b transition hover:bg-[var(--raise)]"
+                  style={{ borderColor: 'rgba(var(--lineRGB),0.05)' }}
+                >
                   {/* Name & Subdomain */}
                   <td className="py-3.5 px-4">
                     <div>
-                      <div className="font-bold text-white text-sm hover:text-indigo-300 transition cursor-pointer" onClick={() => setSelectedTenant(tenant)}>
+                      <div
+                        className="font-bold text-sm cursor-pointer hover:underline"
+                        style={{ color: 'var(--fg)' }}
+                        onClick={() => setSelectedTenant(tenant)}
+                      >
                         {tenant.name}
                       </div>
-                      <div className="text-[11px] text-indigo-400 font-mono flex items-center gap-1 mt-0.5">
-                        <Globe className="w-3 h-3" />
-                        <span>{tenant.fullDomain}</span>
+                      <div className="font-mono text-[10px] text-[var(--acc)]">
+                        {tenant.subdomain}.momotill.io
                       </div>
                     </div>
                   </td>
 
-                  {/* Owner */}
+                  {/* Owner & Region */}
                   <td className="py-3.5 px-4">
-                    <div className="text-slate-200 font-medium">{tenant.owner}</div>
-                    <div className="text-[11px] text-slate-400">{tenant.region}</div>
+                    <div className="font-semibold" style={{ color: 'var(--fg)' }}>{tenant.owner}</div>
+                    <div className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>{tenant.region}</div>
                   </td>
 
                   {/* Plan */}
@@ -160,10 +212,10 @@ export const AdminTenants = () => {
                   {/* Status */}
                   <td className="py-3.5 px-4">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
                         tenant.status === 'Active'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                          : 'bg-rose-500/10 text-rose-400 border-rose-500/20'
                       }`}
                     >
                       <span className={`w-1.5 h-1.5 rounded-full ${tenant.status === 'Active' ? 'bg-emerald-400' : 'bg-rose-400'}`} />
@@ -171,33 +223,43 @@ export const AdminTenants = () => {
                     </span>
                   </td>
 
-                  {/* Revenue */}
-                  <td className="py-3.5 px-4 font-mono font-bold text-white">
+                  {/* GMV */}
+                  <td className="py-3.5 px-4 font-mono font-bold" style={{ color: 'var(--fg)' }}>
                     {tenant.monthlyRevenue}
                   </td>
 
                   {/* Clerks */}
-                  <td className="py-3.5 px-4 font-mono text-slate-300">
-                    {tenant.clerksCount} POS
+                  <td className="py-3.5 px-4">
+                    <span
+                      className="px-2 py-0.5 rounded-md font-mono text-[11px] font-bold"
+                      style={{ background: 'var(--sunken)', color: 'rgba(var(--fgRGB),0.75)' }}
+                    >
+                      {tenant.clerksCount} POS
+                    </span>
                   </td>
 
                   {/* Actions */}
                   <td className="py-3.5 px-4 text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
-                        onClick={() => setSelectedTenant(tenant)}
-                        className="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-[11px] font-medium border border-slate-700"
-                        title="Inspect Tenant"
+                        onClick={() => impersonate({
+                          name: tenant.owner,
+                          role: 'Store CEO',
+                          tenant: tenant.name
+                        })}
+                        className="px-2.5 py-1 rounded-lg text-[10px] font-bold border transition hover:bg-[var(--raise)] cursor-pointer"
+                        style={{ borderColor: 'rgba(var(--lineRGB),0.12)', color: 'var(--acc)' }}
+                        title="Impersonate Owner"
                       >
-                        Inspect
+                        Impersonate
                       </button>
 
                       <button
                         onClick={() => toggleTenantStatus(tenant.id)}
-                        className={`p-1.5 rounded-lg border text-xs transition ${
+                        className={`p-1.5 rounded-lg border transition cursor-pointer ${
                           tenant.status === 'Active'
-                            ? 'border-rose-800/80 text-rose-400 hover:bg-rose-950/50'
-                            : 'border-emerald-800/80 text-emerald-400 hover:bg-emerald-950/50'
+                            ? 'text-rose-400 border-rose-500/20 hover:bg-rose-500/10'
+                            : 'text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/10'
                         }`}
                         title={tenant.status === 'Active' ? 'Suspend Tenant' : 'Activate Tenant'}
                       >
@@ -212,122 +274,94 @@ export const AdminTenants = () => {
         </div>
       </div>
 
-      {/* Provision Tenant Modal with Live Subdomain Checker */}
+      {/* Provision Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 text-white shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div
+            className="rounded-3xl border max-w-md w-full p-6 shadow-2xl space-y-4"
+            style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.12)' }}
+          >
+            <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
               <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30">
-                  <Building2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-white">Provision New SaaS Store</h3>
-                  <p className="text-xs text-slate-400">Automated schema isolation on KVM4</p>
-                </div>
+                <Building2 className="w-5 h-5 text-[var(--acc)]" />
+                <h3 className="font-bold text-base" style={{ color: 'var(--fg)' }}>Provision Store Tenant</h3>
               </div>
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="text-slate-400 hover:text-white"
-              >
+              <button onClick={() => setShowCreateModal(false)} className="hover:text-[var(--fg)]" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateSubmit} className="py-4 space-y-4 text-xs">
+            <form onSubmit={handleCreateSubmit} className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Business Store Name</label>
+                <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Store Name</label>
                 <input
                   type="text"
                   required
                   value={storeName}
-                  onChange={(e) => {
-                    setStoreName(e.target.value);
-                    if (!subdomain) {
-                      setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9]/g, ''));
-                    }
-                  }}
-                  placeholder="e.g. Zenith Tech Mart"
-                  className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                  onChange={e => setStoreName(e.target.value)}
+                  placeholder="e.g. Abidjan Supermarket"
+                  style={inputStyle}
                 />
               </div>
 
-              {/* Subdomain Checker (Deliverable 3.A) */}
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">
-                  Tenant Subdomain
-                </label>
-                <div className="flex items-center rounded-xl border border-slate-800 bg-slate-950 overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500/30 focus-within:border-indigo-500">
+                <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Subdomain</label>
+                <div className="flex items-center">
                   <input
                     type="text"
                     required
-                    value={cleanSubdomain}
-                    onChange={(e) => setSubdomain(e.target.value)}
-                    placeholder="zenith"
-                    className="w-full px-3 py-2 bg-transparent text-xs font-mono text-white focus:outline-none"
+                    value={subdomain}
+                    onChange={e => setSubdomain(e.target.value)}
+                    placeholder="abidjan-market"
+                    style={{ ...inputStyle, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                   />
-                  <span className="px-3 py-2 bg-slate-800/80 text-slate-400 text-xs font-mono border-l border-slate-800">
+                  <span
+                    className="px-3 py-2 border border-l-0 text-[11px] font-mono whitespace-nowrap"
+                    style={{ background: 'var(--raise)', borderColor: 'rgba(var(--lineRGB),0.12)', color: 'rgba(var(--fgRGB),0.5)', borderTopRightRadius: '12px', borderBottomRightRadius: '12px' }}
+                  >
                     .momotill.io
                   </span>
                 </div>
-
-                {/* Subdomain status indicator */}
-                {cleanSubdomain.length > 0 && (
-                  <div className="mt-1.5 flex items-center gap-1.5 text-[11px]">
-                    {isSubdomainValid ? (
-                      <span className="text-emerald-400 flex items-center gap-1 font-semibold">
-                        <Check className="w-3.5 h-3.5" />
-                        Domain available: https://{cleanSubdomain}.momotill.io
-                      </span>
-                    ) : isSubdomainTaken ? (
-                      <span className="text-rose-400 flex items-center gap-1 font-semibold">
-                        <X className="w-3.5 h-3.5" />
-                        Subdomain "{cleanSubdomain}" is already registered.
-                      </span>
-                    ) : (
-                      <span className="text-amber-400">Must be at least 3 characters.</span>
-                    )}
-                  </div>
-                )}
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Owner Name</label>
+                  <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Owner Name</label>
                   <input
                     type="text"
                     required
                     value={ownerName}
-                    onChange={(e) => setOwnerName(e.target.value)}
-                    placeholder="Frank Louis Ohachosim"
-                    className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                    onChange={e => setOwnerName(e.target.value)}
+                    placeholder="Awa Kouassi"
+                    style={inputStyle}
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Country / Region</label>
+                  <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Region</label>
                   <input
                     type="text"
                     value={region}
-                    onChange={(e) => setRegion(e.target.value)}
-                    placeholder="Lagos, Nigeria"
-                    className="w-full px-3 py-2 bg-slate-950 rounded-xl border border-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500"
+                    onChange={e => setRegion(e.target.value)}
+                    placeholder="Abidjan, CI"
+                    style={inputStyle}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-300 mb-1">Subscription Tier</label>
+                <label className="block font-semibold mb-1" style={{ color: 'rgba(var(--fgRGB),0.7)' }}>Subscription Tier</label>
                 <div className="grid grid-cols-3 gap-2">
                   {['Free', 'Basic', 'Pro'].map(p => (
                     <button
                       type="button"
                       key={p}
                       onClick={() => setPlan(p)}
-                      className={`p-2 rounded-xl border text-center transition ${
-                        plan === p
-                          ? 'border-indigo-500 bg-indigo-500/20 text-white font-bold ring-1 ring-indigo-500'
-                          : 'border-slate-800 bg-slate-950 text-slate-400 hover:bg-slate-800'
-                      }`}
+                      className="p-2 rounded-xl border text-center transition cursor-pointer"
+                      style={{
+                        background: plan === p ? 'var(--acc)' : 'var(--sunken)',
+                        color: plan === p ? 'var(--onAcc)' : 'rgba(var(--fgRGB),0.6)',
+                        borderColor: plan === p ? 'var(--acc)' : 'rgba(var(--lineRGB),0.1)'
+                      }}
                     >
                       {p}
                     </button>
@@ -335,20 +369,22 @@ export const AdminTenants = () => {
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-2 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.06)' }}>
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 font-semibold text-xs"
+                  className="px-4 py-2 rounded-xl border font-semibold text-xs cursor-pointer hover:bg-[var(--raise)]"
+                  style={{ borderColor: 'rgba(var(--lineRGB),0.12)', color: 'rgba(var(--fgRGB),0.6)' }}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={!isSubdomainValid}
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs disabled:opacity-50 shadow-md"
+                  className="px-4 py-2 rounded-xl font-bold text-xs disabled:opacity-50 cursor-pointer shadow-md"
+                  style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
                 >
-                  Provision & Deploy
+                  Deploy Tenant
                 </button>
               </div>
             </form>
@@ -356,71 +392,73 @@ export const AdminTenants = () => {
         </div>
       )}
 
-      {/* Tenant Detail Drawer / Modal */}
+      {/* Tenant Detail Drawer */}
       {selectedTenant && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs animate-in fade-in">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 text-white shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+          <div
+            className="border rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4"
+            style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.12)' }}
+          >
+            <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-lg text-white">{selectedTenant.name}</h3>
+                  <h3 className="font-bold text-base" style={{ color: 'var(--fg)' }}>{selectedTenant.name}</h3>
                   {getPlanBadge(selectedTenant.plan)}
                 </div>
-                <div className="text-xs text-indigo-400 font-mono mt-0.5">
+                <div className="text-xs font-mono mt-0.5" style={{ color: 'var(--acc)' }}>
                   https://{selectedTenant.fullDomain}
                 </div>
               </div>
-              <button
-                onClick={() => setSelectedTenant(null)}
-                className="text-slate-400 hover:text-white"
-              >
+              <button onClick={() => setSelectedTenant(null)} className="hover:text-[var(--fg)]" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="py-4 space-y-4 text-xs">
+            <div className="py-2 space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Store Owner:</span>
-                  <div className="font-bold text-sm text-slate-100">{selectedTenant.owner}</div>
-                  <div className="text-[10px] text-slate-500">{selectedTenant.email}</div>
+                <div className="p-3 rounded-2xl border" style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                  <span className="text-[11px]" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>Store Owner:</span>
+                  <div className="font-bold text-sm" style={{ color: 'var(--fg)' }}>{selectedTenant.owner}</div>
+                  <div className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>{selectedTenant.email}</div>
                 </div>
-                <div className="bg-slate-950 p-3 rounded-xl border border-slate-800">
-                  <span className="text-slate-400 text-[11px]">Monthly GMV:</span>
+                <div className="p-3 rounded-2xl border" style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                  <span className="text-[11px]" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>Monthly GMV:</span>
                   <div className="font-bold text-sm text-emerald-400 font-mono">{selectedTenant.monthlyRevenue}</div>
-                  <div className="text-[10px] text-slate-500">Today: {selectedTenant.todaySales}</div>
+                  <div className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>Today: {selectedTenant.todaySales}</div>
                 </div>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                <div className="font-semibold text-slate-300">Technical Isolation Specs:</div>
-                <div className="text-slate-400 text-[11px] space-y-1 font-mono">
-                  <div>&bull; Database Schema: <code>{selectedTenant.subdomain}_schema</code></div>
-                  <div>&bull; API Gateway Route: <code>/tenants/{selectedTenant.subdomain}/*</code></div>
-                  <div>&bull; Active Portable POS Terminals: <strong>{selectedTenant.clerksCount}</strong></div>
-                  <div>&bull; Provisioned Date: {selectedTenant.createdDate}</div>
+              <div className="p-3.5 rounded-2xl border space-y-1.5" style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                <div className="font-semibold" style={{ color: 'var(--fg)' }}>Technical Isolation Specs:</div>
+                <div className="text-[11px] font-mono space-y-1" style={{ color: 'rgba(var(--fgRGB),0.6)' }}>
+                  <div>• Database Schema: <code>{selectedTenant.subdomain}_schema</code></div>
+                  <div>• API Gateway Route: <code>/tenants/{selectedTenant.subdomain}/*</code></div>
+                  <div>• Active POS Terminals: <strong>{selectedTenant.clerksCount}</strong></div>
+                  <div>• Provisioned Date: {selectedTenant.createdDate}</div>
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-between gap-2">
+              <div className="pt-2 flex justify-between gap-2 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.06)' }}>
                 <button
                   onClick={() => {
                     impersonate({
-                      name: selectedTenant.owner,
+                      name: tenant.owner || selectedTenant.owner,
                       role: 'Store CEO',
                       tenant: selectedTenant.name
                     });
                     setSelectedTenant(null);
                   }}
-                  className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs flex items-center gap-1.5 transition"
+                  className="px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                  style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  Impersonate Store CEO
+                  <span>Impersonate Store CEO</span>
                 </button>
 
                 <button
                   onClick={() => setSelectedTenant(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs"
+                  className="px-4 py-2 rounded-xl border font-semibold text-xs cursor-pointer hover:bg-[var(--raise)]"
+                  style={{ borderColor: 'rgba(var(--lineRGB),0.12)', color: 'rgba(var(--fgRGB),0.6)' }}
                 >
                   Close
                 </button>

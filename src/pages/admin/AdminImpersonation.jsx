@@ -24,22 +24,22 @@ export const AdminImpersonation = () => {
       id: `usr-ceo-${t.id}`,
       name: t.owner,
       email: t.email,
-      role: 'Store CEO',
+      role: 'Store CEO / Patron',
       tenant: t.name,
       subdomain: t.subdomain,
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-      destination: '/ceo/dashboard'
+      destination: '/manager'
     })),
-    // Clerks from store
+    // Managers & Clerks from store
     ...clerks.map(c => ({
       id: c.id,
       name: c.name,
       email: c.email,
       role: 'Store Clerk',
-      tenant: 'Apex Electronics & Retail Ltd',
-      subdomain: 'apex',
+      tenant: 'Auto Pièces Kouassi',
+      subdomain: 'autopieces',
       avatar: c.avatar,
-      destination: '/clerk/catalog'
+      destination: '/vendeur'
     }))
   ];
 
@@ -55,24 +55,39 @@ export const AdminImpersonation = () => {
     navigate(user.destination);
   };
 
+  const inputStyle = {
+    background: 'var(--card)',
+    border: '1px solid rgba(var(--lineRGB), 0.12)',
+    color: 'var(--fg)',
+    borderRadius: '14px',
+    padding: '8px 12px 8px 34px',
+    fontSize: '12px',
+    width: '100%',
+    outline: 'none'
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 select-none" style={{ color: 'var(--fg)' }}>
       {/* Header */}
-      <div className="bg-slate-900 border border-slate-800 p-5 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div
+        className="p-5 rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+      >
         <div>
-          <h2 className="text-lg font-bold text-white flex items-center gap-2">
-            <UserCheck className="w-5 h-5 text-indigo-400" />
-            Support User Impersonation Console
+          <h2 className="text-lg font-bold flex items-center gap-2" style={{ color: 'var(--fg)' }}>
+            <UserCheck className="w-5 h-5 text-[var(--acc)]" />
+            <span>Support User Impersonation Console</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Diagnostic tool allowing Master Admins to simulate live customer environments
+          <p className="text-xs mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+            Diagnostic tool allowing Master Admins to simulate live customer and clerk POS environments
           </p>
         </div>
 
         {impersonatedUser && (
           <button
             onClick={exitImpersonation}
-            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-xl transition"
+            className="px-4 py-2 font-bold text-xs rounded-xl transition cursor-pointer"
+            style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
           >
             Exit Active Impersonation
           </button>
@@ -81,77 +96,85 @@ export const AdminImpersonation = () => {
 
       {/* Search Input */}
       <div className="relative w-full max-w-md">
-        <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'rgba(var(--fgRGB),0.4)' }} />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search user name, email, store, or role..."
-          className="w-full pl-9 pr-3 py-2 text-xs bg-slate-900 border border-slate-800 rounded-xl text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+          style={inputStyle}
         />
       </div>
 
       {/* Users Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+      <div
+        className="border rounded-3xl overflow-hidden shadow-sm"
+        style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+      >
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left">
-            <thead className="bg-slate-950/70 border-b border-slate-800 text-slate-400 font-semibold uppercase tracking-wider">
-              <tr>
+            <thead>
+              <tr
+                className="border-b text-[10px] font-bold uppercase tracking-wider"
+                style={{ background: 'var(--raise)', borderColor: 'rgba(var(--lineRGB),0.08)', color: 'rgba(var(--fgRGB),0.45)' }}
+              >
                 <th className="py-3 px-4">User Identity</th>
-                <th className="py-3 px-4">Store Tenant</th>
-                <th className="py-3 px-4">Access Tier</th>
+                <th className="py-3 px-4">Role / Access Tier</th>
+                <th className="py-3 px-4">Tenant Store Name</th>
+                <th className="py-3 px-4">Subdomain Schema</th>
                 <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/80">
-              {filteredUsers.map(user => {
-                const isCurrent = impersonatedUser?.name === user.name;
-
-                return (
-                  <tr key={user.id} className="hover:bg-slate-800/50 transition">
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-3">
-                        <img src={user.avatar} alt={user.name} className="w-9 h-9 rounded-xl object-cover border border-slate-700" />
-                        <div>
-                          <div className="font-bold text-white text-xs">{user.name}</div>
-                          <div className="text-[11px] text-slate-400 font-mono">{user.email}</div>
-                        </div>
+            <tbody>
+              {filteredUsers.map(user => (
+                <tr
+                  key={user.id}
+                  className="border-b transition hover:bg-[var(--raise)]"
+                  style={{ borderColor: 'rgba(var(--lineRGB),0.05)' }}
+                >
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center gap-3">
+                      <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                      <div>
+                        <div className="font-bold text-xs" style={{ color: 'var(--fg)' }}>{user.name}</div>
+                        <div className="text-[10px]" style={{ color: 'rgba(var(--fgRGB),0.4)' }}>{user.email}</div>
                       </div>
-                    </td>
+                    </div>
+                  </td>
 
-                    <td className="py-3.5 px-4">
-                      <div className="text-slate-200 font-medium">{user.tenant}</div>
-                      <div className="text-[10px] text-indigo-400 font-mono">{user.subdomain}.momotill.io</div>
-                    </td>
+                  <td className="py-3.5 px-4">
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
+                      style={{
+                        background: user.role.includes('CEO') ? 'var(--accSoft)' : 'var(--sunken)',
+                        color: user.role.includes('CEO') ? 'var(--acc)' : 'rgba(var(--fgRGB),0.7)',
+                        borderColor: 'rgba(var(--lineRGB),0.1)'
+                      }}
+                    >
+                      {user.role}
+                    </span>
+                  </td>
 
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                          user.role === 'Store CEO'
-                            ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                            : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-                        }`}
-                      >
-                        {user.role}
-                      </span>
-                    </td>
+                  <td className="py-3.5 px-4 font-medium" style={{ color: 'var(--fg)' }}>
+                    {user.tenant}
+                  </td>
 
-                    <td className="py-3.5 px-4 text-right">
-                      <button
-                        onClick={() => handleImpersonate(user)}
-                        className={`px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 ml-auto transition shadow-sm ${
-                          isCurrent
-                            ? 'bg-amber-500 text-slate-950 font-black'
-                            : 'bg-slate-800 hover:bg-indigo-600 text-white border border-slate-700 hover:border-indigo-500'
-                        }`}
-                      >
-                        <LogIn className="w-3.5 h-3.5" />
-                        <span>{isCurrent ? 'Currently Active' : `Login As ${user.role.split(' ')[1]}`}</span>
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+                  <td className="py-3.5 px-4 font-mono text-[11px]" style={{ color: 'rgba(var(--fgRGB),0.5)' }}>
+                    {user.subdomain}
+                  </td>
+
+                  <td className="py-3.5 px-4 text-right">
+                    <button
+                      onClick={() => handleImpersonate(user)}
+                      className="px-3 py-1.5 rounded-xl font-bold text-xs inline-flex items-center gap-1.5 transition active:scale-95 cursor-pointer shadow-sm"
+                      style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
+                    >
+                      <LogIn className="w-3.5 h-3.5" />
+                      <span>Impersonate</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

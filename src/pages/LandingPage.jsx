@@ -17,7 +17,14 @@ import {
   Mail,
   Phone,
   MapPin,
-  ExternalLink
+  ExternalLink,
+  Volume2,
+  Package,
+  Users,
+  Sliders,
+  DollarSign,
+  TrendingUp,
+  FileText
 } from 'lucide-react';
 
 export const LandingPage = () => {
@@ -38,40 +45,40 @@ export const LandingPage = () => {
       setContactName('');
       setContactEmail('');
       setContactMessage('');
-      addToast('Message Received', 'Thank you! BengalBound sales team will contact you shortly.', 'success');
+      addToast('Message Received', 'Thank you! BengalBound team will contact you shortly.', 'success');
     }, 500);
   };
 
-  const features = [
+  const coreFeatures = [
     {
       icon: Mic,
-      title: "Voice Order Entry",
-      desc: "Speak naturally into any handheld terminal. Automated STT speech parsing instantly adds catalog items to the basket."
+      title: "Voice-First Order Entry",
+      desc: "Speak naturally in local languages (French, Wolof, Dioula, Bengali, English). AI extracts items, quantities, and pricing in milliseconds."
     },
     {
-      icon: ScanBarcode,
-      title: "Vision Product Scan",
-      desc: "Computer vision and camera OCR barcode recognition identifies products in milliseconds with zero extra hardware."
+      icon: Package,
+      title: "AI Multi-Mode Inventory",
+      desc: "Add inventory in seconds: photograph 1 item, scan a full shelf of 5–10 products, or photograph a supplier invoice for instant OCR."
+    },
+    {
+      icon: Sliders,
+      title: "Per-Product Pricing & Commission",
+      desc: "Configure wholesale costs, unit prices, and clerk commissions per product with quick steppers and dynamic monthly profit estimation."
+    },
+    {
+      icon: Users,
+      title: "1 Owner + 2 Managers + 6 Clerks",
+      desc: "Built-in operational hierarchy: 1 Patron, 2 Managers leading Team Alpha & Team Beta, and up to 6 sales clerks with dedicated task queues."
     },
     {
       icon: WifiOff,
-      title: "Offline Mode with Auto-Sync",
-      desc: "Keep transacting even when network connectivity drops. Transactions store locally in SQLite and replay upon reconnect."
+      title: "Offline SQLite Resilience",
+      desc: "Transactions store locally during internet drops. When connectivity returns, sales auto-sync seamlessly with zero data loss."
     },
     {
       icon: BarChart3,
-      title: "Real-time Analytics",
-      desc: "Live visibility into daily revenue, peak sales hours, clerk performance, and high-velocity inventory stock."
-    },
-    {
-      icon: Layers,
-      title: "Multi-tenant SaaS Architecture",
-      desc: "Isolated schema-per-tenant isolation on robust KVM4 infrastructure with custom subdomain provisioning."
-    },
-    {
-      icon: Sparkles,
-      title: "AI-Powered Insights",
-      desc: "Smart demand forecasting, basket affinity upselling suggestions, and automated transaction risk detection."
+      title: "Weekly AI Intelligence & Forecasts",
+      desc: "Automated business reports, who-sold-what team rankings, inventory depletion warnings, and 30-day predictive revenue modeling."
     }
   ];
 
@@ -82,7 +89,7 @@ export const LandingPage = () => {
       period: "forever",
       desc: "Ideal for solo kiosks and micro-merchants starting out.",
       features: [
-        "1 POS Terminal",
+        "1 POS Mobile Terminal",
         "Up to 50 Products",
         "Basic Cash & MoMo Payments",
         "Standard Daily Reports",
@@ -92,246 +99,235 @@ export const LandingPage = () => {
       popular: false
     },
     {
-      name: "Basic Plan",
+      name: "Growth Plan",
       price: "$29",
       period: "per month",
-      desc: "Great for growing single-store retail and coffee shops.",
+      desc: "Designed for single retail stores with up to 6 clerks.",
       features: [
-        "Up to 5 POS Clerks",
-        "Unlimited Catalog SKUs",
-        "Full Mobile Money + Card POS",
-        "Offline Mode & Sync",
-        "Clerk Permission Controls",
-        "Standard Email Support"
+        "1 Owner + 2 Managers + 6 Clerks",
+        "AI Voice POS & Camera Scanning",
+        "AI Multi-Mode Inventory OCR",
+        "Per-Product Pricing & Commissions",
+        "Offline SQLite Auto-Sync",
+        "Daily Manager Approvals"
       ],
-      cta: "Choose Basic",
+      cta: "Choose Growth",
       popular: true
     },
     {
-      name: "Pro Plan",
+      name: "Enterprise Multi-Store",
       price: "$99",
       period: "per month",
-      desc: "Built for multi-location businesses requiring advanced controls.",
+      desc: "Built for multi-location businesses requiring Master Admin oversight.",
       features: [
-        "Unlimited POS Clerks & Branches",
-        "AI Voice Order Entry",
-        "Vision Barcode Scanning",
-        "CEO Approval Workflows",
-        "Advanced Analytics & CSV Export",
-        "Dedicated Account Lead"
+        "Unlimited Stores & Tenants",
+        "Tier 3 Master Admin Console",
+        "Automated AI Restock Proposals",
+        "Team Alpha vs Beta Leaderboards",
+        "Custom Payment Rail Provisioning",
+        "Dedicated Account Engineering"
       ],
-      cta: "Go Pro",
+      cta: "Go Enterprise",
       popular: false
     }
   ];
 
   const testimonials = [
     {
-      quote: "MoMoTill changed how our 5 supermarket outlets accept mobile money. Clerks take orders on phones twice as fast.",
-      name: "Amina Al-Mansur",
-      role: "Managing Director, Savannah Gourmet Supermarket",
+      quote: "The voice order entry and invoice OCR saved us hours every morning. Our clerks speak French and Wolof, and the app never misses an item.",
+      name: "Awa Kouassi",
+      role: "Owner, Auto Pièces Kouassi (Abidjan)",
       avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80"
     },
     {
-      quote: "The offline mode saved our operations during fiber outages in Downtown. When internet resumed, all 80 orders synced perfectly.",
-      name: "Chinedu Okafor",
-      role: "Founder, Lagos Tech & Gadgets",
+      quote: "The offline mode saved our operations during market fiber outages. When connection resumed, all 120 orders synced perfectly.",
+      name: "Ibrahim Coulibaly",
+      role: "Operations Manager, Sandaga Trading",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80"
     },
     {
-      quote: "The CEO dashboard gives me instant profit margin tracking from my phone while I'm traveling between branches.",
-      name: "Gisele Umutoni",
-      role: "Owner, Kigali Artisan Roastery",
+      quote: "Having per-product pricing and commission steppers on my phone gives me total visibility into net profit before approving discounts.",
+      name: "Frank Louis Ohachosim",
+      role: "Managing Director, Apex Retail Group",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-600 selection:text-white">
-      {/* Hero Section (Deliverable 4.A) */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 bg-gradient-to-b from-blue-900 via-slate-900 to-slate-950 text-white">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(37,99,235,0.25),transparent_50%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(124,58,237,0.2),transparent_50%)] pointer-events-none" />
+    <div className="min-h-screen select-none" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
+      {/* ── Hero Section ── */}
+      <section className="relative overflow-hidden pt-12 pb-16 lg:pt-20 lg:pb-24 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] rounded-full opacity-[0.09] blur-3xl"
+            style={{ background: 'var(--acc)' }}
+          />
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Copy */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-semibold backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span>Next-Generation Portable POS Platform</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-                The Future of <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">Point-of-Sale</span>
-              </h1>
-
-              <p className="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Voice-powered, AI-enhanced, mobile-first POS system engineered for modern retailers, supermarkets, and frontline clerks across emerging markets.
-              </p>
-
-              {/* CTAs */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
-                <button
-                  onClick={() => navigate('/signup')}
-                  className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 flex items-center gap-2 transition hover:scale-105"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                  <span>Sign Up Free</span>
-                </button>
-
-                <button
-                  onClick={() => navigate('/how-it-works')}
-                  className="px-6 py-3.5 rounded-2xl bg-purple-600/80 hover:bg-purple-500 text-white font-bold text-sm shadow-xl shadow-purple-600/20 flex items-center gap-2 transition hover:scale-105"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-300" />
-                  <span>How It Works</span>
-                </button>
-
-                <button
-                  onClick={() => navigate('/vendeur')}
-                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
-                >
-                  <Smartphone className="w-4 h-4 text-emerald-400" />
-                  <span>Vendeur Mobile</span>
-                </button>
-
-                <button
-                  onClick={() => navigate('/manager')}
-                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
-                >
-                  <Smartphone className="w-4 h-4 text-amber-400" />
-                  <span>Manager &amp; Patron</span>
-                </button>
-
-                <button
-                  onClick={() => navigate('/ceo/dashboard')}
-                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
-                >
-                  <span>CEO Web</span>
-                </button>
-              </div>
-
-              {/* Feature pills */}
-              <div className="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-400">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>100% Offline Capable</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>MTN MoMo & M-Pesa Native</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Multi-Tenant Schema</span>
-                </div>
-              </div>
+          <div className="text-center max-w-3xl mx-auto space-y-6">
+            {/* Audio Tour Banner Link */}
+            <div
+              onClick={() => navigate('/how-it-works')}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold border transition hover:scale-105 cursor-pointer shadow-sm"
+              style={{ background: 'var(--accSoft)', borderColor: 'rgba(var(--lineRGB),0.12)', color: 'var(--acc)' }}
+            >
+              <Volume2 className="w-4 h-4 animate-pulse" />
+              <span>Listen to Interactive Audio Tour &amp; Workflow →</span>
             </div>
 
-            {/* Right Interactive Mockup Preview Card */}
-            <div className="lg:col-span-5 flex justify-center">
-              <div className="w-full max-w-md bg-gradient-to-b from-slate-800/90 to-slate-900/90 border border-slate-700/80 rounded-3xl p-6 shadow-2xl backdrop-blur-xl space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-700">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-rose-500" />
-                    <span className="w-3 h-3 rounded-full bg-amber-500" />
-                    <span className="w-3 h-3 rounded-full bg-emerald-500" />
-                    <span className="text-xs font-mono text-slate-400 ml-2">MoMoTill v1.0</span>
-                  </div>
-                  <span className="text-[10px] font-bold uppercase bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full">
-                    3-Tier Live Demo
-                  </span>
+            <h1 className="font-display font-black text-4xl sm:text-6xl tracking-tight leading-tight">
+              The Portable POS System for <span style={{ color: 'var(--acc)' }}>High-Growth Markets</span>
+            </h1>
+
+            <p className="text-base sm:text-xl font-normal leading-relaxed" style={{ color: 'rgba(var(--fgRGB),0.65)' }}>
+              Voice-first order entry, computer vision AI inventory, per-product profit controls, and multi-tier store management engineered for modern retail.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <button
+                onClick={() => navigate('/signup')}
+                className="px-6 py-3.5 rounded-2xl font-display font-bold text-sm shadow-xl flex items-center gap-2 transition hover:scale-105 active:scale-95 cursor-pointer"
+                style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
+              >
+                <span>Deploy Store Free</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => navigate('/how-it-works')}
+                className="px-6 py-3.5 rounded-2xl font-bold text-sm border flex items-center gap-2 transition hover:bg-[var(--raise)] cursor-pointer"
+                style={{ borderColor: 'rgba(var(--lineRGB),0.14)', color: 'var(--fg)' }}
+              >
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>How It Works & Audio</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/manager')}
+                className="px-5 py-3.5 rounded-2xl font-bold text-sm border flex items-center gap-2 transition hover:bg-[var(--raise)] cursor-pointer"
+                style={{ borderColor: 'rgba(var(--lineRGB),0.14)', color: 'var(--fg)' }}
+              >
+                <Smartphone className="w-4 h-4 text-[var(--acc)]" />
+                <span>Manager & Patron App</span>
+              </button>
+            </div>
+
+            {/* Quick Metrics */}
+            <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+              {[
+                { label: 'Store Structure', value: '1 Owner · 2 Mgrs · 6 Clerks' },
+                { label: 'Payment Rails', value: 'Wave · MTN · OM · bKash' },
+                { label: 'Inventory AI', value: 'Photo · Shelf · Invoice OCR' },
+                { label: 'Offline Resilience', value: '100% SQLite Offline' }
+              ].map((m, i) => (
+                <div key={i} className="p-3 rounded-2xl border" style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                  <div className="text-xs sm:text-sm font-bold text-[var(--fg)]">{m.value}</div>
+                  <div className="text-[10px] uppercase tracking-wider mt-0.5" style={{ color: 'rgba(var(--fgRGB),0.45)' }}>{m.label}</div>
                 </div>
-
-                {/* Tier Selection Buttons in Hero Card */}
-                <div className="space-y-2.5">
-                  <div
-                    onClick={() => navigate('/clerk/catalog')}
-                    className="p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 cursor-pointer transition flex items-center justify-between group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-blue-600 text-white">
-                        <Smartphone className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-sm text-white group-hover:text-blue-400 transition">Tier 1: Store Clerk App</div>
-                        <div className="text-xs text-slate-400">Flutter mobile catalog & voice checkout</div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-400 group-hover:translate-x-1 transition" />
-                  </div>
-
-                  <div
-                    onClick={() => navigate('/ceo/dashboard')}
-                    className="p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 cursor-pointer transition flex items-center justify-between group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-purple-600 text-white">
-                        <BarChart3 className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-sm text-white group-hover:text-purple-400 transition">Tier 2: Store CEO Portal</div>
-                        <div className="text-xs text-slate-400">Inventory control & transaction approvals</div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-purple-400 group-hover:translate-x-1 transition" />
-                  </div>
-
-                  <div
-                    onClick={() => navigate('/admin/tenants')}
-                    className="p-3.5 rounded-2xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 cursor-pointer transition flex items-center justify-between group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2.5 rounded-xl bg-indigo-600 text-white">
-                        <ShieldCheck className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <div className="font-bold text-sm text-white group-hover:text-indigo-400 transition">Tier 3: Master Admin</div>
-                        <div className="text-xs text-slate-400">Global SaaS tenant management</div>
-                      </div>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-indigo-400 group-hover:translate-x-1 transition" />
-                  </div>
-                </div>
-
-                <div className="pt-2 text-center text-xs text-slate-400">
-                  BengalBound Technologies &bull; Prepared for Frank Louis Ohachosim
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section (Deliverable 4.B) */}
-      <section className="py-20 bg-white" id="features">
+      {/* ── Interactive Prototype Quick Launcher ── */}
+      <section className="py-12 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-              Cutting-Edge POS Features
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Engineered for Emerging Market Merchants
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <h2 className="font-display font-black text-2xl tracking-tight">Explore the 4 Prototype Layers</h2>
+            <p className="text-xs text-[rgba(var(--fgRGB),0.6)] mt-1">Jump directly into any role in the 3-tier architecture</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                title: 'Vendeur Mobile',
+                role: 'Tier 1: Clerk POS',
+                desc: 'Voice sales, camera barcode scanner, task hub, and team audio chat.',
+                path: '/vendeur',
+                color: 'var(--acc)',
+                badge: 'Frontline'
+              },
+              {
+                title: 'Manager & Patron',
+                role: 'Tier 2: Mobile Companion',
+                desc: 'Role switcher (Patron vs Mgr 1/2), pricing steppers, task history, approvals.',
+                path: '/manager',
+                color: '#10B981',
+                badge: 'Store Owner'
+              },
+              {
+                title: 'CEO Web Platform',
+                role: 'Tier 2: Web Dashboard',
+                desc: 'Real-time financial charts, team rosters, AI invoice scanner, CSV export.',
+                path: '/ceo/dashboard',
+                color: '#3B82F6',
+                badge: 'Management'
+              },
+              {
+                title: 'Master Admin',
+                role: 'Tier 3: SaaS Super Admin',
+                desc: 'Multi-tenant cloud provisioning, KVM4 cluster health, user impersonation.',
+                path: '/admin/tenants',
+                color: '#8B5CF6',
+                badge: 'Platform SaaS'
+              }
+            ].map((card, i) => (
+              <div
+                key={i}
+                onClick={() => navigate(card.path)}
+                className="p-5 rounded-3xl border transition hover:scale-[1.02] cursor-pointer flex flex-col justify-between space-y-4"
+                style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.1)' }}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'var(--accSoft)', color: card.color }}>
+                      {card.badge}
+                    </span>
+                    <span className="text-[10px] font-mono text-[rgba(var(--fgRGB),0.4)]">{card.role}</span>
+                  </div>
+                  <h3 className="font-display font-bold text-base text-[var(--fg)]">{card.title}</h3>
+                  <p className="text-xs text-[rgba(var(--fgRGB),0.6)] mt-1.5 leading-relaxed">{card.desc}</p>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-xs font-bold pt-2 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.06)', color: card.color }}>
+                  <span>Launch Experience</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Feature Highlights ── */}
+      <section className="py-16 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="font-display font-black text-3xl tracking-tight">
+              Engineered for Real-World Retail
             </h2>
-            <p className="text-base text-slate-600">
-              Combining voice intelligence, offline resilience, and mobile money rails into an intuitive portable till.
+            <p className="text-sm text-[rgba(var(--fgRGB),0.6)] mt-2">
+              Every feature designed to solve real operational bottlenecks: language barriers, internet drops, supply delays, and pricing governance.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feat, idx) => {
+            {coreFeatures.map((feat, i) => {
               const Icon = feat.icon;
               return (
                 <div
-                  key={idx}
-                  className="bg-slate-50 rounded-3xl p-6 border border-slate-200/80 hover:border-blue-300 hover:shadow-lg transition space-y-3 group"
+                  key={i}
+                  className="p-6 rounded-3xl border space-y-3 transition hover:border-[rgba(var(--lineRGB),0.2)]"
+                  style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-110 transition">
-                    <Icon className="w-6 h-6" />
+                  <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-white" style={{ background: 'var(--acc)' }}>
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-bold text-lg text-slate-900">{feat.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{feat.desc}</p>
+                  <h3 className="font-display font-bold text-base text-[var(--fg)]">{feat.title}</h3>
+                  <p className="text-xs text-[rgba(var(--fgRGB),0.6)] leading-relaxed">{feat.desc}</p>
                 </div>
               );
             })}
@@ -339,69 +335,63 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Pricing Section (Deliverable 4.C) */}
-      <section className="py-20 bg-slate-100 border-t border-slate-200" id="pricing">
+      {/* ── SaaS Pricing Tiers ── */}
+      <section className="py-16 border-b" id="pricing" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
-              Predictable SaaS Pricing
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Flexible Tiers for Every Merchant Size
-            </h2>
-            <p className="text-base text-slate-600">
-              Start free, scale smoothly to full enterprise oversight with dedicated cloud infrastructure.
-            </p>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="font-display font-black text-3xl tracking-tight">Predictable SaaS Pricing</h2>
+            <p className="text-sm text-[rgba(var(--fgRGB),0.6)] mt-2">Deploy for a single corner store or scale across thousands of franchises</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {pricingTiers.map((tier, idx) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {pricingTiers.map((tier, i) => (
               <div
-                key={idx}
-                className={`rounded-3xl p-8 transition flex flex-col justify-between ${
-                  tier.popular
-                    ? 'bg-slate-900 text-white shadow-2xl ring-2 ring-blue-500 scale-105 z-10'
-                    : 'bg-white text-slate-900 border border-slate-200 shadow-sm'
-                }`}
+                key={i}
+                className="p-6 rounded-3xl border flex flex-col justify-between space-y-6 relative transition"
+                style={{
+                  background: 'var(--card)',
+                  borderColor: tier.popular ? 'var(--acc)' : 'rgba(var(--lineRGB),0.08)',
+                  boxShadow: tier.popular ? '0 0 25px rgba(var(--accRGB, 255, 106, 19), 0.15)' : 'none'
+                }}
               >
-                <div>
-                  {tier.popular && (
-                    <span className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-                      Most Popular
-                    </span>
-                  )}
-                  <h3 className="text-xl font-bold">{tier.name}</h3>
-                  <p className={`text-xs mt-1 mb-4 ${tier.popular ? 'text-slate-400' : 'text-slate-500'}`}>
-                    {tier.desc}
-                  </p>
+                {tier.popular && (
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full text-white"
+                    style={{ background: 'var(--acc)' }}
+                  >
+                    Recommended
+                  </span>
+                )}
 
-                  <div className="flex items-baseline gap-1 my-4">
-                    <span className="text-4xl font-black tracking-tight">{tier.price}</span>
-                    <span className={`text-xs ${tier.popular ? 'text-slate-400' : 'text-slate-500'}`}>
-                      / {tier.period}
-                    </span>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-display font-bold text-lg text-[var(--fg)]">{tier.name}</h3>
+                    <p className="text-xs text-[rgba(var(--fgRGB),0.55)] mt-1">{tier.desc}</p>
                   </div>
 
-                  <ul className="space-y-3 my-6 text-xs">
-                    {tier.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-center gap-2.5">
-                        <CheckCircle2 className={`w-4 h-4 shrink-0 ${tier.popular ? 'text-blue-400' : 'text-emerald-500'}`} />
-                        <span className={tier.popular ? 'text-slate-200' : 'text-slate-700'}>{feat}</span>
-                      </li>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-black text-[var(--fg)]">{tier.price}</span>
+                    <span className="text-xs text-[rgba(var(--fgRGB),0.45)]">/{tier.period}</span>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                    {tier.features.map((f, j) => (
+                      <div key={j} className="flex items-center gap-2 text-xs text-[rgba(var(--fgRGB),0.75)]">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <span>{f}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
 
                 <button
-                  onClick={() => {
-                    addToast('Plan Selected', `Initiated signup flow for ${tier.name}.`, 'info');
-                    navigate('/signup');
+                  onClick={() => navigate('/signup')}
+                  className="w-full py-3 rounded-2xl text-xs font-bold transition active:scale-95 cursor-pointer"
+                  style={{
+                    background: tier.popular ? 'var(--acc)' : 'var(--sunken)',
+                    color: tier.popular ? 'var(--onAcc)' : 'var(--fg)',
+                    border: tier.popular ? 'none' : '1px solid rgba(var(--lineRGB),0.12)'
                   }}
-                  className={`w-full py-3 rounded-2xl font-bold text-xs transition ${
-                    tier.popular
-                      ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-500/30'
-                      : 'bg-slate-900 hover:bg-slate-800 text-white'
-                  }`}
                 >
                   {tier.cta}
                 </button>
@@ -411,37 +401,35 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section (Deliverable 4.D) */}
-      <section className="py-20 bg-white border-t border-slate-200">
+      {/* ── Testimonials ── */}
+      <section className="py-16 border-b" style={{ borderColor: 'rgba(var(--lineRGB),0.08)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-200">
-              Merchant Testimonials
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Trusted by Retail Pioneers
-            </h2>
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="font-display font-black text-3xl tracking-tight">Trusted by Retail Leaders</h2>
+            <p className="text-sm text-[rgba(var(--fgRGB),0.6)] mt-2">See how merchants across Abidjan, Dakar, Lagos, and Dhaka power daily operations</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="bg-slate-50 rounded-3xl p-6 border border-slate-200 flex flex-col justify-between space-y-4">
+            {testimonials.map((t, i) => (
+              <div
+                key={i}
+                className="p-6 rounded-3xl border space-y-4 flex flex-col justify-between"
+                style={{ background: 'var(--card)', borderColor: 'rgba(var(--lineRGB),0.08)' }}
+              >
                 <div className="space-y-3">
                   <div className="flex gap-1 text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400" />
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="w-3.5 h-3.5 fill-current" />
                     ))}
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
-                    "{t.quote}"
-                  </p>
+                  <p className="text-xs text-[rgba(var(--fgRGB),0.7)] italic leading-relaxed">"{t.quote}"</p>
                 </div>
 
-                <div className="flex items-center gap-3 pt-3 border-t border-slate-200/60">
-                  <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-slate-300" />
+                <div className="flex items-center gap-3 pt-3 border-t" style={{ borderColor: 'rgba(var(--lineRGB),0.06)' }}>
+                  <img src={t.avatar} alt={t.name} className="w-9 h-9 rounded-full object-cover" />
                   <div>
-                    <div className="font-bold text-xs text-slate-900">{t.name}</div>
-                    <div className="text-[11px] text-slate-500">{t.role}</div>
+                    <div className="text-xs font-bold text-[var(--fg)]">{t.name}</div>
+                    <div className="text-[10px] text-[rgba(var(--fgRGB),0.5)]">{t.role}</div>
                   </div>
                 </div>
               </div>
@@ -450,113 +438,54 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Contact Section (Deliverable 4.E) */}
-      <section className="py-20 bg-slate-900 text-white" id="contact">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Contact details */}
-            <div className="space-y-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-500/20 px-3 py-1 rounded-full border border-blue-400/30">
-                Contact & Demo Request
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-                Request a Custom Demonstration
-              </h2>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-md">
-                Talk to our engineering leads at BengalBound Technologies to arrange on-site deployment, hardware procurement, or multi-tenant licensing.
-              </p>
-
-              <div className="space-y-4 text-xs text-slate-300">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 text-blue-400" />
-                  <span>contact@bengalbound.dev</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 text-blue-400" />
-                  <span>+1 (800) 555-MOMO / +234 800 123 4567</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-blue-400" />
-                  <span>BengalBound Technologies Ltd.</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Form */}
-            <div className="bg-slate-950 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl">
-              <form onSubmit={handleContactSubmit} className="space-y-4 text-xs">
-                <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Your Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    placeholder="Frank Louis Ohachosim"
-                    className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-blue-500/30"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="frank@apexretail.ng"
-                    className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-blue-500/30"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-semibold text-slate-300 mb-1">Message / Requirements</label>
-                  <textarea
-                    rows={4}
-                    required
-                    value={contactMessage}
-                    onChange={(e) => setContactMessage(e.target.value)}
-                    placeholder="Tell us about your store footprint, clerk count, and hardware preferences..."
-                    className="w-full px-3 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-white focus:ring-2 focus:ring-blue-500/30"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmittingContact}
-                  className="w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition disabled:opacity-60"
-                >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>{isSubmittingContact ? 'Submitting...' : 'Send Demo Request'}</span>
-                </button>
-              </form>
-            </div>
+      {/* ── Contact Section ── */}
+      <section className="py-16" id="contact">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+          <div>
+            <h2 className="font-display font-black text-3xl tracking-tight">Get in Touch with BengalBound</h2>
+            <p className="text-sm text-[rgba(var(--fgRGB),0.6)] mt-2">Interested in custom white-label deployments or enterprise pilot programs?</p>
           </div>
+
+          <form onSubmit={handleContactSubmit} className="max-w-md mx-auto space-y-3 text-left">
+            <input
+              type="text"
+              required
+              value={contactName}
+              onChange={e => setContactName(e.target.value)}
+              placeholder="Your full name"
+              className="w-full px-4 py-3 rounded-2xl text-xs border outline-none"
+              style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.12)', color: 'var(--fg)' }}
+            />
+            <input
+              type="email"
+              required
+              value={contactEmail}
+              onChange={e => setContactEmail(e.target.value)}
+              placeholder="Work email"
+              className="w-full px-4 py-3 rounded-2xl text-xs border outline-none"
+              style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.12)', color: 'var(--fg)' }}
+            />
+            <textarea
+              required
+              rows={3}
+              value={contactMessage}
+              onChange={e => setContactMessage(e.target.value)}
+              placeholder="Tell us about your store requirements..."
+              className="w-full px-4 py-3 rounded-2xl text-xs border outline-none resize-none"
+              style={{ background: 'var(--sunken)', borderColor: 'rgba(var(--lineRGB),0.12)', color: 'var(--fg)' }}
+            />
+            <button
+              type="submit"
+              disabled={isSubmittingContact}
+              className="w-full py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition active:scale-95 cursor-pointer"
+              style={{ background: 'var(--acc)', color: 'var(--onAcc)' }}
+            >
+              <Send className="w-4 h-4" />
+              <span>{isSubmittingContact ? 'Sending...' : 'Send Message'}</span>
+            </button>
+          </form>
         </div>
       </section>
-
-      {/* Footer (Deliverable 4.F) */}
-      <footer className="py-8 bg-slate-950 border-t border-slate-900 text-slate-400 text-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-white">
-            <span className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center text-white text-xs font-black">
-              M
-            </span>
-            <span>MoMoTill Portable POS System</span>
-          </div>
-
-          <div className="flex items-center gap-4 text-slate-400">
-            <a href="#features" className="hover:text-white transition">Features</a>
-            <a href="#pricing" className="hover:text-white transition">Pricing</a>
-            <a href="#contact" className="hover:text-white transition">Contact</a>
-            <span className="hover:text-white cursor-pointer">Privacy</span>
-          </div>
-
-          <div>
-            &copy; 2026 BengalBound Technologies. All rights reserved.
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
