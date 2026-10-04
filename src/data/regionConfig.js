@@ -1,5 +1,65 @@
 // BOUND OS Multi-Region Configuration & Data Dictionary
 export const REGIONS = {
+  en: {
+    code: 'EN',
+    country: 'Global (English)',
+    city: 'Worldwide',
+    area: 'Demo Store',
+    lang: 'en',
+    flag: 'linear-gradient(135deg,#012169 0 33%,#FFFFFF 33% 66%,#C8102E 66%)',
+    acc: '#2563EB',
+    acc2: '#059669',
+    accSoft: 'rgba(37,99,235,.13)',
+    font: "'IBM Plex Sans',system-ui,sans-serif",
+    curr: '$',
+    sep: ',',
+    pre: true,
+    bn: false,
+    langs: 'English · French · Bengali',
+    langLabel: 'English (French, Bengali supported)',
+    currLabel: 'US Dollar · $ (USD)',
+    rails: [
+      { n: 'Card (Visa/MC)', c: '#1A56DB' },
+      { n: 'Mobile Money', c: '#059669' },
+      { n: 'Bank Transfer', c: '#7C3AED' },
+      { n: 'Cash', c: '#8A9099' }
+    ],
+    railShort: 'Card · MoMo · Bank',
+    ussd: 'Tap-to-pay NFC · QR Code',
+    store: 'Apex Retail Demo Store',
+    owner: 'Frank Louis Ohachosim',
+    clerk: 'Demo Clerk',
+    clerkInit: 'DC',
+    phone: '+1 555 000 1234',
+    admin: { name: 'BengalBound Admin', role: 'Platform Administrator' },
+    mission: 'Empower every merchant worldwide with a voice-first, AI-powered POS — no training, no keyboard, no hidden fees.',
+    words: ['I', 'sold', '3', 'oil', 'filters,', '$12.50', 'each,', 'customer', 'paid', 'by', 'card'],
+    heard: 'oil filter (generic)',
+    real: 'Premium Oil Filter',
+    item: 'Premium Oil Filter',
+    qty: '3 units',
+    unitPrice: 1250,
+    total: 3750,
+    rail: 'Card (Visa/MC)',
+    today: 184500,
+    salesToday: 23,
+    pending: 4,
+    sales: [
+      { item: 'Bosch Brake Pads', rail: 'Card', time: '11:42', amount: 4500, sync: 'sync', buyer: { name: 'James Carter', phone: '+1 555 123 4567' } },
+      { item: 'NGK Spark Plugs ×4', rail: 'Mobile Money', time: '11:20', amount: 1200, sync: 'wait', buyer: { name: 'Sarah Johnson', phone: '+1 555 987 6543' } },
+      { item: 'Air Filter Set', rail: 'Cash', time: '10:58', amount: 800, sync: 'sync', buyer: { name: 'Mike Davis', phone: '+1 555 246 8135' } }
+    ],
+    ocr: [
+      { name: 'Premium Oil Filter', sku: 'OIL-FLT-EN', delta: '+24', stock: 24, price: 1250 },
+      { name: 'Bosch Brake Pads', sku: 'BRK-BSH-EN', delta: '+8', stock: 8, price: 4500 },
+      { name: 'Wiper Blade Set', sku: 'WPR-BLD-EN', delta: '-3', stock: 5, price: 650 }
+    ],
+    queue: [
+      { label: 'Sale · Premium Oil Filter × 3', meta: '12:04 · $37.50', state: 'pending' },
+      { label: 'Shelf Photo · 1.2 MB', meta: '11:58 · Local OCR pending', state: 'pending' },
+      { label: 'Sale · NGK Spark Plugs × 10', meta: '11:47 · $125.00', state: 'pending' }
+    ]
+  },
   ci: {
     code: 'CI',
     country: "Côte d'Ivoire",
@@ -179,6 +239,7 @@ export const REGIONS = {
 };
 
 export const GLOBAL_COUNTRIES = [
+  { code: 'EN', country: 'Global (English)', city: 'Worldwide', live: true, flag: REGIONS.en.flag, langs: REGIONS.en.langs, curr: 'USD · $', rails: 'Card · MoMo · Bank · Cash' },
   { code: 'CI', country: "Côte d'Ivoire", city: 'Abidjan', live: true, flag: REGIONS.ci.flag, langs: REGIONS.ci.langs, curr: 'XOF · FCFA', rails: 'Wave · Orange · MTN · Moov' },
   { code: 'SN', country: 'Sénégal', city: 'Dakar', live: true, flag: REGIONS.sn.flag, langs: REGIONS.sn.langs, curr: 'XOF · FCFA', rails: 'Wave · Orange · Free · Cash' },
   { code: 'BD', country: 'বাংলাদেশ (Bangladesh)', city: 'ঢাকা (Dhaka)', live: true, flag: REGIONS.bd.flag, langs: REGIONS.bd.langs, curr: 'BDT · ৳', rails: 'bKash · Nagad · Rocket' },

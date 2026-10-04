@@ -13,7 +13,9 @@ import {
   Moon,
   Sparkles,
   UserCheck,
-  ChevronDown
+  ChevronDown,
+  HelpCircle,
+  UserPlus
 } from 'lucide-react';
 import { REGIONS, GLOBAL_COUNTRIES } from '../../data/regionConfig';
 
@@ -44,8 +46,11 @@ export const GlobalRoleSwitcher = () => {
   const isCeoWeb = location.pathname.startsWith('/ceo') && !isCeoMobile;
   const isAdmin = location.pathname.startsWith('/admin');
   const isLanding = location.pathname === '/';
+  const isSignup = location.pathname === '/signup';
+  const isHowItWorks = location.pathname === '/how-it-works';
 
   const regionsList = [
+    { code: 'en', label: 'EN', flag: REGIONS.en.flag, title: 'Global (English)' },
     { code: 'ci', label: 'CI', flag: REGIONS.ci.flag, title: "Côte d'Ivoire (Abidjan)" },
     { code: 'sn', label: 'SN', flag: REGIONS.sn.flag, title: 'Sénégal (Dakar)' },
     { code: 'bd', label: 'BD', flag: REGIONS.bd.flag, title: 'বাংলাদেশ (Dhaka)' }
@@ -109,6 +114,19 @@ export const GlobalRoleSwitcher = () => {
               Overview
             </button>
 
+            {/* How It Works Guide */}
+            <button
+              onClick={() => navigate('/how-it-works')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap ${
+                isHowItWorks
+                  ? 'bg-[var(--acc)] text-[var(--onAcc)] font-bold shadow-xs'
+                  : 'text-[rgba(var(--fgRGB),0.7)] hover:text-[var(--fg)] hover:bg-[var(--raise)]'
+              }`}
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-[var(--acc)]" />
+              <span>How It Works</span>
+            </button>
+
             {/* Vendeur Mobile (Tier 1) */}
             <button
               onClick={() => navigate('/vendeur')}
@@ -159,6 +177,19 @@ export const GlobalRoleSwitcher = () => {
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>Master Admin</span>
+            </button>
+
+            {/* Sign Up Flow */}
+            <button
+              onClick={() => navigate('/signup')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap border ${
+                isSignup
+                  ? 'bg-[var(--acc)] border-[var(--acc)] text-[var(--onAcc)] shadow-xs'
+                  : 'border-[rgba(var(--lineRGB),0.15)] bg-[var(--accSoft)] text-[var(--acc)] hover:bg-[var(--acc)] hover:text-[var(--onAcc)]'
+              }`}
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Sign Up</span>
             </button>
           </nav>
 

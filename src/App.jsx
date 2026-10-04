@@ -41,6 +41,10 @@ import { AdminImpersonation } from './pages/admin/AdminImpersonation';
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
 
+// Sign Up and Explainer Pages
+import { SignupPage } from './pages/SignupPage';
+import { HowItWorksPage } from './pages/HowItWorksPage';
+
 // 404 Fallback
 const NotFound = () => (
   <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white">
@@ -71,6 +75,12 @@ function App() {
         <Routes>
           {/* Landing Page */}
           <Route path="/" element={<LandingPage />} />
+
+          {/* Sign Up & Onboarding Flow */}
+          <Route path="/signup" element={<SignupPage />} />
+
+          {/* How It Works Explainer Flow */}
+          <Route path="/how-it-works" element={<HowItWorksPage />} />
 
           {/* Bound OS: Vendeur Mobile (Clerk App matching boundos.netlify.app) */}
           <Route

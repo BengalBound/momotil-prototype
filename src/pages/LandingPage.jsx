@@ -173,27 +173,43 @@ export const LandingPage = () => {
               {/* CTAs */}
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
                 <button
-                  onClick={() => navigate('/clerk/catalog')}
+                  onClick={() => navigate('/signup')}
                   className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-xl shadow-blue-600/30 flex items-center gap-2 transition hover:scale-105"
                 >
-                  <Smartphone className="w-4 h-4" />
-                  <span>Launch Clerk App</span>
                   <ArrowRight className="w-4 h-4" />
+                  <span>Sign Up Free</span>
+                </button>
+
+                <button
+                  onClick={() => navigate('/how-it-works')}
+                  className="px-6 py-3.5 rounded-2xl bg-purple-600/80 hover:bg-purple-500 text-white font-bold text-sm shadow-xl shadow-purple-600/20 flex items-center gap-2 transition hover:scale-105"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <span>How It Works</span>
+                </button>
+
+                <button
+                  onClick={() => navigate('/vendeur')}
+                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
+                >
+                  <Smartphone className="w-4 h-4 text-emerald-400" />
+                  <span>Vendeur Mobile</span>
+                </button>
+
+                <button
+                  onClick={() => navigate('/manager')}
+                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
+                >
+                  <Smartphone className="w-4 h-4 text-amber-400" />
+                  <span>Manager &amp; Patron</span>
                 </button>
 
                 <button
                   onClick={() => navigate('/ceo/dashboard')}
-                  className="px-6 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
+                  className="px-5 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white font-bold text-sm border border-slate-700 flex items-center gap-2 transition"
                 >
-                  <span>Explore CEO Portal</span>
+                  <span>CEO Web</span>
                 </button>
-
-                <a
-                  href="#pricing"
-                  className="px-5 py-3.5 text-slate-400 hover:text-white text-sm font-semibold transition"
-                >
-                  View Pricing &gt;
-                </a>
               </div>
 
               {/* Feature pills */}
@@ -379,7 +395,7 @@ export const LandingPage = () => {
                 <button
                   onClick={() => {
                     addToast('Plan Selected', `Initiated signup flow for ${tier.name}.`, 'info');
-                    navigate('/admin/tenants');
+                    navigate('/signup');
                   }}
                   className={`w-full py-3 rounded-2xl font-bold text-xs transition ${
                     tier.popular

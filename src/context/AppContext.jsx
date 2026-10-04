@@ -54,11 +54,11 @@ export const AppProvider = ({ children }) => {
   const [mobileFrameMode, setMobileFrameMode] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem('bound_theme') || 'dark');
-  const [regionCode, setRegionCode] = useState(() => localStorage.getItem('bound_region') || 'ci');
-  const [language, setLanguage] = useState(() => localStorage.getItem('bound_lang') || 'fr');
+  const [regionCode, setRegionCode] = useState(() => localStorage.getItem('bound_region') || 'en');
+  const [language, setLanguage] = useState(() => localStorage.getItem('bound_lang') || 'en');
 
   // Active region data
-  const currentRegion = REGIONS[regionCode] || REGIONS.ci;
+  const currentRegion = REGIONS[regionCode] || REGIONS.en;
 
   // Apply theme and region CSS variables to html root
   useEffect(() => {
