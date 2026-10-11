@@ -9,6 +9,7 @@ import {
   Clock, ArrowUpRight, ShieldCheck, ChevronRight,
   Filter, HelpCircle, Phone, Award, DollarSign
 } from 'lucide-react';
+import { MobileProductSalesAnalytics } from '../../../components/analytics/MobileProductSalesAnalytics';
 
 // ── i18n strings ────────────────────────────────────────────────────────────
 const T = {
@@ -354,24 +355,25 @@ export const BoundManagerPatronApp = () => {
 
   // ── Sub-Tabs Definition ──────────────────────────────────────────────────
   const managerTabs = [
-    { id: 'dash', label: t.dash, icon: LayoutDashboard },
-    { id: 'whoSold', label: t.whoSoldWhat, icon: Users },
-    { id: 'approvals', label: t.approvals, badge: totalPendingApprovals, icon: CheckCircle2 },
-    { id: 'tasks', label: 'Tasks & History', icon: CheckSquare },
-    { id: 'requests', label: 'Clerk Requests', badge: pendingInvApprovals.length, icon: MessageSquare },
+    { id: 'analytics', label: 'Sales & Products', icon: BarChart3 },
+    { id: 'dash', label: 'Shift Overview', icon: LayoutDashboard },
+    { id: 'whoSold', label: 'Team Sales', icon: Users },
+    { id: 'approvals', label: 'Approvals', badge: totalPendingApprovals, icon: CheckCircle2 },
+    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
+    { id: 'requests', label: 'Requests', badge: pendingInvApprovals.length, icon: MessageSquare },
     { id: 'export', label: 'Export', icon: Download },
-    { id: 'inventory', label: t.inventory, icon: Package }
+    { id: 'inventory', label: 'Stock', icon: Package }
   ];
 
   const patronTabs = [
-    { id: 'analytics', label: 'Analytics & AI', icon: TrendingUp },
-    { id: 'tickets', label: t.aiTickets, badge: aiTickets.filter(a => a.status === 'Open').length, icon: Sparkles },
-    { id: 'whoSoldAll', label: t.whoSoldWhat, icon: Users },
-    { id: 'pricing', label: 'Pricing & Commissions', icon: Sliders },
-    { id: 'team', label: 'Team & Roles', icon: ShieldCheck },
-    { id: 'field', label: t.fieldRequests, badge: pendingFieldRequests.length, icon: AlertTriangle },
-    { id: 'reports', label: 'Reports & Export', icon: FileText },
-    { id: 'inventory', label: t.inventory, icon: Package }
+    { id: 'analytics', label: 'Sales & Products', icon: TrendingUp },
+    { id: 'tickets', label: 'AI Tickets', badge: aiTickets.filter(a => a.status === 'Open').length, icon: Sparkles },
+    { id: 'whoSoldAll', label: 'Team Sales', icon: Users },
+    { id: 'pricing', label: 'Pricing', icon: Sliders },
+    { id: 'team', label: 'Team', icon: ShieldCheck },
+    { id: 'field', label: 'Requests', badge: pendingFieldRequests.length, icon: AlertTriangle },
+    { id: 'reports', label: 'Reports', icon: FileText },
+    { id: 'inventory', label: 'Stock', icon: Package }
   ];
 
   const currentTabs = isPatron ? patronTabs : managerTabs;
@@ -496,22 +498,22 @@ export const BoundManagerPatronApp = () => {
       <div className="p-2.5 bg-[var(--card)] border-b border-[rgba(var(--lineRGB),0.08)] shrink-0">
         <div className="flex items-center gap-1 p-1 rounded-xl bg-[var(--raise)] text-xs font-bold">
           <button
-            onClick={() => { setActiveRole('mgr-1'); setSelectedTab('dash'); }}
-            className={`flex-1 py-1.5 px-2 rounded-lg transition text-center truncate ${activeRole === 'mgr-1' ? 'bg-[var(--card)] text-[var(--acc)] shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
+            onClick={() => { setActiveRole('mgr-1'); setSelectedTab('analytics'); }}
+            className={`flex-1 py-1.5 px-1.5 rounded-lg transition text-center truncate ${activeRole === 'mgr-1' ? 'bg-[var(--card)] text-[var(--acc)] shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
           >
-            👔 Mgr 1 (Alpha)
+            👔 Alpha
           </button>
           <button
-            onClick={() => { setActiveRole('mgr-2'); setSelectedTab('dash'); }}
-            className={`flex-1 py-1.5 px-2 rounded-lg transition text-center truncate ${activeRole === 'mgr-2' ? 'bg-[var(--card)] text-[var(--acc)] shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
+            onClick={() => { setActiveRole('mgr-2'); setSelectedTab('analytics'); }}
+            className={`flex-1 py-1.5 px-1.5 rounded-lg transition text-center truncate ${activeRole === 'mgr-2' ? 'bg-[var(--card)] text-[var(--acc)] shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
           >
-            👔 Mgr 2 (Beta)
+            👔 Beta
           </button>
           <button
             onClick={() => { setActiveRole('patron'); setSelectedTab('analytics'); }}
-            className={`flex-1 py-1.5 px-2 rounded-lg transition text-center truncate ${activeRole === 'patron' ? 'bg-[var(--card)] text-amber-500 shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
+            className={`flex-1 py-1.5 px-1.5 rounded-lg transition text-center truncate ${activeRole === 'patron' ? 'bg-[var(--card)] text-amber-500 shadow-sm' : 'text-[rgba(var(--fgRGB),0.6)]'}`}
           >
-            👑 {t.patron} (Owner)
+            👑 Owner
           </button>
         </div>
 
@@ -647,6 +649,14 @@ export const BoundManagerPatronApp = () => {
               </div>
             </div>
           </>
+        )}
+
+        {/* ── MANAGER VIEW: SALES & PRODUCT GRAPH ANALYTICS ── */}
+        {!isPatron && selectedTab === 'analytics' && (
+          <MobileProductSalesAnalytics
+            role="manager"
+            managerTeam={activeManager.team}
+          />
         )}
 
         {/* ── MANAGER VIEW 2: WHO SOLD WHAT (TEAM BREAKDOWN) ── */}
@@ -982,23 +992,9 @@ export const BoundManagerPatronApp = () => {
         {/* PATRON TAB 1: ANALYTICS & AI INSIGHTS */}
         {isPatron && selectedTab === 'analytics' && (
           <div className="space-y-4">
-            {/* Store GMV Banner */}
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-amber-500/10 via-[var(--card)] to-[var(--card)] border border-amber-500/20">
-              <div className="flex justify-between items-center text-[10px] font-mono uppercase text-amber-500 font-bold mb-1">
-                <span>Total Store Revenue Today</span>
-                <span>👑 Owner Overview</span>
-              </div>
-              <div className="font-display font-black text-3xl tracking-tight text-[var(--fg)]">
-                {formatMoney(totalStoreSales)}
-              </div>
-              <div className="flex items-center gap-3 text-xs mt-2 text-[rgba(var(--fgRGB),0.6)]">
-                <span>Net Margin: <strong className="text-[var(--ok)]">31.4%</strong></span>
-                <span>•</span>
-                <span>2 Teams Active</span>
-                <span>•</span>
-                <span>6 Clerks</span>
-              </div>
-            </div>
+            <MobileProductSalesAnalytics
+              role="owner"
+            />
 
             {/* Team Alpha vs Team Beta Comparison Card */}
             <div className="p-3.5 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.08)] space-y-2.5">

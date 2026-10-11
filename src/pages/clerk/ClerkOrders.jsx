@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
-import { Clock, CheckCircle2, AlertCircle, Eye, Printer, ChevronRight, X, Calendar } from 'lucide-react';
+import { Clock, CheckCircle2, AlertCircle, Eye, Printer, ChevronRight, X, Calendar, TrendingUp, BarChart3, ListFilter } from 'lucide-react';
+import { MobileProductSalesAnalytics } from '../../components/analytics/MobileProductSalesAnalytics';
 
 export const ClerkOrders = () => {
-  const { transactions, addToast } = useApp();
+  const { transactions, addToast, currentRegion } = useApp();
+  const [activeTab, setActiveTab] = useState('orders'); // 'orders' | 'analytics'
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [statusFilter, setStatusFilter] = useState('All');
 
@@ -28,15 +30,46 @@ export const ClerkOrders = () => {
 
   return (
     <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-base font-bold text-slate-900">Order History</h2>
-          <p className="text-xs text-slate-500">Frontline POS transactions</p>
-        </div>
-        <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-xl">
-          {filteredOrders.length} orders
-        </span>
+      {/* View Switcher: Orders vs Graph Analytics */}
+      <div className="flex items-center gap-1 p-1 bg-slate-200/80 rounded-xl text-xs font-bold">
+        <button
+          onClick={() => setActiveTab('orders')}
+          className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition ${
+            activeTab === 'orders' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <Clock className="w-3.5 h-3.5" />
+          <span>Order History</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('analytics')}
+          className={`flex-1 py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition ${
+            activeTab === 'analytics' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <TrendingUp className="w-3.5 h-3.5" />
+          <span>Sales & Products Graph</span>
+        </button>
       </div>
+
+      {activeTab === 'analytics' ? (
+        <div className="pt-1">
+          <MobileProductSalesAnalytics
+            role="vendor"
+            vendorLock={currentRegion.clerk || "Amara Okonkwo"}
+          />
+        </div>
+      ) : (
+        <>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-900">Order History</h2>
+              <p className="text-xs text-slate-500">Frontline POS transactions</p>
+            </div>
+            <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-xl">
+              {filteredOrders.length} orders
+            </span>
+          </div>
 
       {/* Filter tabs */}
       <div className="flex gap-1.5 p-1 bg-slate-200/60 rounded-xl text-xs">
@@ -176,6 +209,8 @@ export const ClerkOrders = () => {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

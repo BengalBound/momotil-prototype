@@ -18,6 +18,7 @@ import {
   INITIAL_AUTO_PRODUCTS
 } from '../data/teamData';
 import { REGIONS, GLOBAL_COUNTRIES, BN_DIGITS } from '../data/regionConfig';
+import { EXTENDED_TRANSACTIONS } from '../data/salesAnalyticsData';
 
 const AppContext = createContext();
 
@@ -47,7 +48,19 @@ export const AppProvider = ({ children }) => {
 
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem('momotill_transactions');
-    return saved ? JSON.parse(saved) : INITIAL_TRANSACTIONS;
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length >= 15) return parsed;
+        // Merge saved recent transactions with extended transactions
+        const existingIds = new Set(parsed.map(t => t.id));
+        const merged = [...parsed, ...EXTENDED_TRANSACTIONS.filter(t => !existingIds.has(t.id))];
+        return merged;
+      } catch (e) {
+        return EXTENDED_TRANSACTIONS;
+      }
+    }
+    return EXTENDED_TRANSACTIONS;
   });
 
   const [tenants, setTenants] = useState(() => {

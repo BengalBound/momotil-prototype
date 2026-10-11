@@ -7,8 +7,10 @@ import {
   Package, ChevronRight, Wifi, WifiOff, RefreshCw,
   CheckSquare, Sparkles, Send, Paperclip, Clock,
   Search, ArrowRight, X, AlertTriangle, Play,
-  Pause, RotateCcw, ScanLine, FileText, Image as ImageIcon
+  Pause, RotateCcw, ScanLine, FileText, Image as ImageIcon,
+  TrendingUp, BarChart3
 } from 'lucide-react';
+import { MobileProductSalesAnalytics } from '../../components/analytics/MobileProductSalesAnalytics';
 
 // ── i18n strings keyed by region lang ──────────────────────────────────────
 const T = {
@@ -400,6 +402,7 @@ export const BoundVendeurApp = () => {
   // Bottom navigation items
   const navItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: t.dashboard },
+    { id: 'analytics', icon: TrendingUp, label: 'Analytics' },
     { id: 'tasks', icon: CheckSquare, label: t.tasks, badge: myTasks.filter(t => t.status !== 'Completed').length },
     { id: 'inventory', icon: Package, label: t.inventory },
     { id: 'chat', icon: MessageSquare, label: t.chat },
@@ -745,6 +748,28 @@ export const BoundVendeurApp = () => {
                   </span>
                 </div>
               </div>
+
+              {/* Shortcut Card to Vendor's Personal Graph Analytics */}
+              <button
+                onClick={() => setActiveNav('analytics')}
+                className="w-full p-3 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.1)] flex items-center justify-between hover:border-[var(--acc)] transition active:scale-[0.98]"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: 'var(--accSoft)', color: 'var(--acc)' }}>
+                    <TrendingUp className="w-4 h-4" />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-xs flex items-center gap-1.5">
+                      <span>My Product Sales &amp; Graphs</span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded-full font-bold" style={{ background: 'var(--accSoft)', color: 'var(--acc)' }}>Stats</span>
+                    </div>
+                    <div className="text-[10px] text-[rgba(var(--fgRGB),0.55)]">
+                      View which products you sell most &amp; commissions
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[rgba(var(--fgRGB),0.4)]" />
+              </button>
 
               {/* Big Voice Action Button */}
               <button
@@ -1283,6 +1308,18 @@ export const BoundVendeurApp = () => {
               </form>
             </>
           )}
+        </div>
+      )}
+
+      {/* ═════════════════════════════════════════════════════════════════ */}
+      {/* ── SCREEN 4.5: ANALYTICS TAB ── */}
+      {/* ═════════════════════════════════════════════════════════════════ */}
+      {activeNav === 'analytics' && (
+        <div className="flex-1 overflow-y-auto p-3">
+          <MobileProductSalesAnalytics
+            role="vendor"
+            vendorLock={R.clerk}
+          />
         </div>
       )}
 
