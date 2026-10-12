@@ -1,274 +1,284 @@
 export const INITIAL_PRODUCTS = [
-  // Electronics
+  // Brakes & Rotors
   {
     id: "prod-1",
-    name: "iPhone 15 Pro Max 256GB",
-    category: "Electronics",
-    price: 999.00,
-    costPrice: 820.00,
-    stock: 14,
-    minStock: 5,
+    name: "Bosch Brake Pads (Front Set)",
+    category: "Auto Parts",
+    price: 45.00,
+    costPrice: 28.00,
+    stock: 34,
+    minStock: 10,
     barcode: "8806091234561",
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&auto=format&fit=crop&q=80",
-    description: "Titanium design, A17 Pro chip, customizable Action button."
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    description: "OEM-spec ceramic brake pads for passenger and commercial vehicles."
   },
   {
     id: "prod-2",
-    name: "Samsung Galaxy S24 Ultra",
-    category: "Electronics",
-    price: 1199.00,
-    costPrice: 950.00,
-    stock: 8,
-    minStock: 4,
+    name: "Brembo Heavy Duty Brake Discs",
+    category: "Auto Parts",
+    price: 68.00,
+    costPrice: 42.00,
+    stock: 22,
+    minStock: 8,
     barcode: "8806091234562",
-    image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=600&auto=format&fit=crop&q=80",
-    description: "Galaxy AI powered flagship smartphone with S-Pen."
+    image: "https://images.unsplash.com/photo-1563720223185-11003d516935?w=600&auto=format&fit=crop&q=80",
+    description: "Vented front brake discs pair for commercial and passenger vehicles."
   },
+
+  // Engine & Fluids
   {
     id: "prod-3",
-    name: "Sony WH-1000XM5 Wireless Headphones",
-    category: "Electronics",
-    price: 349.99,
-    costPrice: 260.00,
-    stock: 19,
-    minStock: 6,
+    name: "Synthetic Engine Oil 5L (5W-30)",
+    category: "Auto Parts",
+    price: 35.00,
+    costPrice: 22.00,
+    stock: 48,
+    minStock: 15,
     barcode: "8806091234563",
-    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80",
-    description: "Industry-leading noise cancellation with auto NC optimizer."
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&auto=format&fit=crop&q=80",
+    description: "Full-synthetic motor oil for extended drain intervals and engine protection."
   },
   {
     id: "prod-4",
-    name: "Apple Watch Series 9 GPS",
-    category: "Electronics",
-    price: 399.00,
-    costPrice: 310.00,
-    stock: 12,
-    minStock: 5,
+    name: "Premium Oil Filter (Universal)",
+    category: "Auto Parts",
+    price: 12.50,
+    costPrice: 6.00,
+    stock: 60,
+    minStock: 20,
     barcode: "8806091234564",
-    image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600&auto=format&fit=crop&q=80",
-    description: "S9 SiP chip, double tap gesture, brighter display."
+    image: "https://images.unsplash.com/photo-1601984840798-44da9ccb3be8?w=600&auto=format&fit=crop&q=80",
+    description: "High-flow oil filter with anti-drainback valve for most engine types."
   },
   {
     id: "prod-5",
-    name: "Logitech MX Master 3S Mouse",
-    category: "Electronics",
-    price: 99.99,
-    costPrice: 65.00,
-    stock: 28,
-    minStock: 10,
+    name: "Radiator Coolant Antifreeze 1L",
+    category: "Auto Parts",
+    price: 9.00,
+    costPrice: 4.50,
+    stock: 55,
+    minStock: 20,
     barcode: "8806091234565",
-    image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?w=600&auto=format&fit=crop&q=80",
-    description: "Ergonomic wireless mouse with 8K DPI track-on-glass sensor."
-  },
-  {
-    id: "prod-6",
-    name: "Anker 737 PowerBank 24,000mAh",
-    category: "Electronics",
-    price: 129.99,
-    costPrice: 85.00,
-    stock: 22,
-    minStock: 8,
-    barcode: "8806091234566",
-    image: "https://images.unsplash.com/photo-1609592426504-4c407c6f0923?w=600&auto=format&fit=crop&q=80",
-    description: "140W fast charging portable battery with smart display."
+    image: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&auto=format&fit=crop&q=80",
+    description: "OAT coolant concentrate for aluminium and cast-iron engine blocks."
   },
 
-  // Clothing & Apparel
+  // Ignition & Electrical
+  {
+    id: "prod-6",
+    name: "NGK Spark Plugs ×4",
+    category: "Auto Parts",
+    price: 12.00,
+    costPrice: 6.50,
+    stock: 80,
+    minStock: 25,
+    barcode: "8806091234566",
+    image: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&auto=format&fit=crop&q=80",
+    description: "Iridium tip spark plugs for improved ignitability and fuel efficiency."
+  },
   {
     id: "prod-7",
-    name: "BengalBound Premium Cotton T-Shirt",
-    category: "Clothing",
-    price: 25.00,
-    costPrice: 10.00,
-    stock: 45,
-    minStock: 15,
+    name: "Optima RedTop 12V Car Battery",
+    category: "Auto Parts",
+    price: 189.00,
+    costPrice: 128.00,
+    stock: 12,
+    minStock: 4,
     barcode: "8806091234567",
-    image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop&q=80",
-    description: "100% organic heavyweight cotton tee with tailored fit."
+    image: "https://images.unsplash.com/photo-1609592806074-d1a1eb7bdf29?w=600&auto=format&fit=crop&q=80",
+    description: "AGM spiral-cell battery with 800 CCA for powerful engine cranking."
   },
   {
     id: "prod-8",
-    name: "Heritage Denim Jacket",
-    category: "Clothing",
-    price: 89.50,
-    costPrice: 45.00,
-    stock: 16,
-    minStock: 5,
+    name: "Alternator 90A (Rebuilt)",
+    category: "Auto Parts",
+    price: 95.00,
+    costPrice: 58.00,
+    stock: 9,
+    minStock: 3,
     barcode: "8806091234568",
-    image: "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=600&auto=format&fit=crop&q=80",
-    description: "Classic vintage wash denim with copper rivet hardware."
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80",
+    description: "Remanufactured alternator for reliable charging system output."
   },
+
+  // Filters & Intake
   {
     id: "prod-9",
-    name: "Athletic Flex Performance Hoodie",
-    category: "Clothing",
-    price: 65.00,
-    costPrice: 32.00,
-    stock: 24,
-    minStock: 8,
+    name: "Air Filter Set (OEM Fit)",
+    category: "Auto Parts",
+    price: 8.00,
+    costPrice: 4.00,
+    stock: 45,
+    minStock: 15,
     barcode: "8806091234569",
-    image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&auto=format&fit=crop&q=80",
-    description: "Thermal fleece lined athletic wear with kangaroo pouch."
+    image: "https://images.unsplash.com/photo-1567789884554-0b844b597180?w=600&auto=format&fit=crop&q=80",
+    description: "High-efficiency panel air filter for improved airflow and engine longevity."
   },
   {
     id: "prod-10",
-    name: "Urban Chino Trousers - Khaki",
-    category: "Clothing",
-    price: 49.00,
-    costPrice: 22.00,
-    stock: 18,
-    minStock: 6,
+    name: "Fuel Filter (In-Line)",
+    category: "Auto Parts",
+    price: 14.00,
+    costPrice: 7.00,
+    stock: 38,
+    minStock: 12,
     barcode: "8806091234570",
-    image: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=600&auto=format&fit=crop&q=80",
-    description: "Stretch twill casual trousers for all-day comfort."
-  },
-  {
-    id: "prod-11",
-    name: "Water-resistant Trail Cap",
-    category: "Clothing",
-    price: 22.00,
-    costPrice: 8.50,
-    stock: 35,
-    minStock: 10,
-    barcode: "8806091234571",
-    image: "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&auto=format&fit=crop&q=80",
-    description: "Quick-dry nylon cap with adjustable back closure."
+    image: "https://images.unsplash.com/photo-1504222490345-c075b7bdc8de?w=600&auto=format&fit=crop&q=80",
+    description: "Micron-rated inline fuel filter to protect injectors and carburettors."
   },
 
-  // Food & Fresh Bakery
+  // Suspension & Steering
   {
-    id: "prod-12",
-    name: "Artisan Sourdough Loaf",
-    category: "Food",
-    price: 6.50,
-    costPrice: 2.80,
-    stock: 15,
+    id: "prod-11",
+    name: "Monroe Gas-Matic Shock Absorbers (Pair)",
+    category: "Auto Parts",
+    price: 120.00,
+    costPrice: 78.00,
+    stock: 16,
     minStock: 5,
-    barcode: "8806091234572",
-    image: "https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?w=600&auto=format&fit=crop&q=80",
-    description: "Slow-fermented 36hr artisanal bakery loaf."
+    barcode: "8806091234571",
+    image: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&auto=format&fit=crop&q=80",
+    description: "Gas-charged shock absorbers for improved ride comfort and handling."
   },
   {
+    id: "prod-12",
+    name: "Tie Rod End (Inner & Outer Kit)",
+    category: "Auto Parts",
+    price: 38.00,
+    costPrice: 20.00,
+    stock: 20,
+    minStock: 6,
+    barcode: "8806091234572",
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    description: "Complete tie rod end replacement kit for precise steering geometry."
+  },
+
+  // Tyres & Wheels
+  {
     id: "prod-13",
-    name: "Organic Belgian Chocolate Bar 85%",
-    category: "Food",
-    price: 4.80,
-    costPrice: 2.10,
-    stock: 52,
-    minStock: 15,
+    name: "Michelin Primacy 4 Tyre 205/55R16",
+    category: "Auto Parts",
+    price: 115.00,
+    costPrice: 82.00,
+    stock: 24,
+    minStock: 8,
     barcode: "8806091234573",
-    image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=600&auto=format&fit=crop&q=80",
-    description: "Single-origin dark cocoa with sea salt crystals."
+    image: "https://images.unsplash.com/photo-1578844251758-2f71da64c96f?w=600&auto=format&fit=crop&q=80",
+    description: "Premium touring tyre with excellent wet grip and long tread life."
   },
   {
     id: "prod-14",
-    name: "Smoked Turkey Club Sandwich",
-    category: "Food",
-    price: 8.50,
-    costPrice: 3.90,
-    stock: 9,
+    name: "Alloy Wheel Lug Nuts M12×1.5 (Set of 20)",
+    category: "Auto Parts",
+    price: 22.00,
+    costPrice: 10.00,
+    stock: 7,
     minStock: 10, // low stock flag!
     barcode: "8806091234574",
-    image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format&fit=crop&q=80",
-    description: "Freshly made daily with avocado, turkey breast & garlic aioli."
+    image: "https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=600&auto=format&fit=crop&q=80",
+    description: "Hex-head chrome lug nuts compatible with most alloy wheel fitments."
   },
+
+  // Wipers & Exterior
   {
     id: "prod-15",
-    name: "Mediterranean Olive Oil 750ml",
-    category: "Food",
-    price: 18.00,
-    costPrice: 11.50,
-    stock: 25,
-    minStock: 8,
+    name: "Wiper Blade Set (Front Pair)",
+    category: "Auto Parts",
+    price: 13.00,
+    costPrice: 6.50,
+    stock: 42,
+    minStock: 15,
     barcode: "8806091234575",
-    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600&auto=format&fit=crop&q=80",
-    description: "Cold-pressed extra virgin olive oil from Crete."
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    description: "Beam wiper blades with all-season rubber compound for clear visibility."
   },
   {
     id: "prod-16",
-    name: "Roasted Almonds & Dried Berries 200g",
-    category: "Food",
-    price: 5.50,
-    costPrice: 2.50,
-    stock: 40,
-    minStock: 12,
+    name: "Headlight Bulb H4 (Pair) 60/55W",
+    category: "Auto Parts",
+    price: 18.00,
+    costPrice: 8.00,
+    stock: 50,
+    minStock: 15,
     barcode: "8806091234576",
-    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80",
-    description: "Energy trail mix with whole California almonds and cranberries."
+    image: "https://images.unsplash.com/photo-1504222490345-c075b7bdc8de?w=600&auto=format&fit=crop&q=80",
+    description: "Halogen H4 replacement bulbs for high and low beam headlights."
   },
 
-  // Beverages
+  // Transmission & Drivetrain
   {
     id: "prod-17",
-    name: "Specialty Caramel Macchiato Latte",
-    category: "Beverages",
-    price: 4.50,
-    costPrice: 1.40,
-    stock: 65,
-    minStock: 20,
+    name: "ATF Automatic Transmission Fluid 1L",
+    category: "Auto Parts",
+    price: 11.00,
+    costPrice: 5.50,
+    stock: 30,
+    minStock: 10,
     barcode: "8806091234577",
-    image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600&auto=format&fit=crop&q=80",
-    description: "Espresso shot layered with velvety steamed milk and vanilla caramel."
+    image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&auto=format&fit=crop&q=80",
+    description: "Multi-vehicle ATF for smooth gear shifts and transmission protection."
   },
   {
     id: "prod-18",
-    name: "Matcha Green Tea Latte",
-    category: "Beverages",
-    price: 5.25,
-    costPrice: 1.80,
-    stock: 38,
-    minStock: 10,
+    name: "CV Axle Shaft (Driver Side)",
+    category: "Auto Parts",
+    price: 88.00,
+    costPrice: 55.00,
+    stock: 8,
+    minStock: 3,
     barcode: "8806091234578",
-    image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=600&auto=format&fit=crop&q=80",
-    description: "Ceremonial grade Uji Japanese matcha whisked with oat milk."
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop&q=80",
+    description: "Remanufactured constant velocity axle shaft with new boots and clips."
   },
+
+  // Tools & Accessories
   {
     id: "prod-19",
-    name: "Cold Pressed Orange & Ginger Juice 330ml",
-    category: "Beverages",
-    price: 3.95,
-    costPrice: 1.20,
+    name: "12V DC Portable Tyre Inflator",
+    category: "Auto Parts",
+    price: 32.00,
+    costPrice: 18.00,
     stock: 4, // low stock flag!
-    minStock: 10,
+    minStock: 8,
     barcode: "8806091234579",
-    image: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=600&auto=format&fit=crop&q=80",
-    description: "Raw vitamin booster juice with zero added sugar."
+    image: "https://images.unsplash.com/photo-1609592806074-d1a1eb7bdf29?w=600&auto=format&fit=crop&q=80",
+    description: "Compact 12V compressor with pressure gauge and auto shut-off for cars and bikes."
   },
   {
     id: "prod-20",
-    name: "Sparkling Mineral Water 500ml",
-    category: "Beverages",
-    price: 2.20,
-    costPrice: 0.60,
-    stock: 80,
-    minStock: 25,
+    name: "OBD2 Diagnostic Scanner",
+    category: "Auto Parts",
+    price: 55.00,
+    costPrice: 30.00,
+    stock: 18,
+    minStock: 5,
     barcode: "8806091234580",
-    image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=600&auto=format&fit=crop&q=80",
-    description: "Naturally effervescent alpine spring water in glass bottle."
+    image: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=600&auto=format&fit=crop&q=80",
+    description: "Bluetooth OBD2 scanner reads and clears engine fault codes on all vehicles."
   },
   {
     id: "prod-21",
-    name: "Iced Hibiscus Berry Tea",
-    category: "Beverages",
-    price: 3.50,
-    costPrice: 0.90,
+    name: "Jumper / Booster Cables 400A 4m",
+    category: "Auto Parts",
+    price: 24.00,
+    costPrice: 11.00,
     stock: 3, // low stock flag!
     minStock: 8,
     barcode: "8806091234581",
-    image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&auto=format&fit=crop&q=80",
-    description: "Tart herbal hibiscus steeped with sweet blackberries and mint."
+    image: "https://images.unsplash.com/photo-1609592806074-d1a1eb7bdf29?w=600&auto=format&fit=crop&q=80",
+    description: "Heavy-gauge copper clamp booster cables for quick-start emergencies."
   },
   {
     id: "prod-22",
-    name: "Cold Brew Nitro Coffee Can",
-    category: "Beverages",
-    price: 4.00,
-    costPrice: 1.50,
+    name: "Torque Wrench 1/2\" Drive 20-200Nm",
+    category: "Auto Parts",
+    price: 42.00,
+    costPrice: 22.00,
     stock: 2, // low stock flag!
-    minStock: 10,
+    minStock: 5,
     barcode: "8806091234582",
-    image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=600&auto=format&fit=crop&q=80",
-    description: "Smooth 20-hour steeped Ethiopian beans infused with micro-nitrogen."
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80",
+    description: "Click-type torque wrench with 72-tooth ratchet for precise fastener tightening."
   }
 ];
 
@@ -378,10 +388,10 @@ export const INITIAL_TRANSACTIONS = [
     customerPhone: "+234 803 111 2233",
     itemsCount: 2,
     items: [
-      { name: "iPhone 15 Pro Max 256GB", qty: 1, price: 999.00 },
-      { name: "Anker 737 PowerBank 24,000mAh", qty: 1, price: 129.99 }
+      { name: "Optima RedTop 12V Car Battery", qty: 1, price: 189.00 },
+      { name: "Premium Oil Filter (Universal)", qty: 2, price: 12.50 }
     ],
-    total: 1128.99,
+    total: 214.00,
     paymentMethod: "Mobile Money (MTN MoMo)",
     status: "Approved",
     timestamp: "10 mins ago",
@@ -394,10 +404,10 @@ export const INITIAL_TRANSACTIONS = [
     customerPhone: "+234 809 333 4455",
     itemsCount: 3,
     items: [
-      { name: "Specialty Caramel Macchiato Latte", qty: 2, price: 4.50 },
-      { name: "Artisan Sourdough Loaf", qty: 1, price: 6.50 }
+      { name: "NGK Spark Plugs ×4", qty: 2, price: 12.00 },
+      { name: "Air Filter Set (OEM Fit)", qty: 1, price: 8.00 }
     ],
-    total: 15.50,
+    total: 32.00,
     paymentMethod: "Cash",
     status: "Completed",
     timestamp: "24 mins ago",
@@ -408,15 +418,15 @@ export const INITIAL_TRANSACTIONS = [
     clerkName: "Kwame Mensah",
     customerName: "Dr. Samuel Adeyemi",
     customerPhone: "+234 812 555 7788",
-    itemsCount: 1,
+    itemsCount: 2,
     items: [
-      { name: "Samsung Galaxy S24 Ultra", qty: 1, price: 1199.00 }
+      { name: "Monroe Gas-Matic Shock Absorbers (Pair)", qty: 2, price: 120.00 }
     ],
-    total: 1199.00,
+    total: 240.00,
     paymentMethod: "Card (Visa Debit)",
     status: "Pending", // Needs CEO approval!
     requiresApproval: true,
-    approvalReason: "High-value transaction > $1,000",
+    approvalReason: "High-value transaction > $200",
     timestamp: "38 mins ago",
     date: "2026-10-03 17:26"
   },
@@ -427,10 +437,10 @@ export const INITIAL_TRANSACTIONS = [
     customerPhone: "+233 24 999 8877",
     itemsCount: 2,
     items: [
-      { name: "Sony WH-1000XM5 Wireless Headphones", qty: 1, price: 349.99 },
-      { name: "Logitech MX Master 3S Mouse", qty: 1, price: 99.99 }
+      { name: "Bosch Brake Pads (Front Set)", qty: 2, price: 45.00 },
+      { name: "Wiper Blade Set (Front Pair)", qty: 1, price: 13.00 }
     ],
-    total: 449.98,
+    total: 103.00,
     paymentMethod: "Mobile Money (AirtelTigo)",
     status: "Approved",
     timestamp: "1 hour ago",
@@ -441,13 +451,12 @@ export const INITIAL_TRANSACTIONS = [
     clerkName: "Fatima Al-Hassan",
     customerName: "Ngozi Chukwu",
     customerPhone: "+234 705 444 3322",
-    itemsCount: 4,
+    itemsCount: 3,
     items: [
-      { name: "Heritage Denim Jacket", qty: 1, price: 89.50 },
-      { name: "BengalBound Premium Cotton T-Shirt", qty: 2, price: 25.00 },
-      { name: "Water-resistant Trail Cap", qty: 1, price: 22.00 }
+      { name: "Brembo Heavy Duty Brake Discs", qty: 2, price: 68.00 },
+      { name: "Radiator Coolant Antifreeze 1L", qty: 2, price: 9.00 }
     ],
-    total: 161.50,
+    total: 154.00,
     paymentMethod: "Card (Mastercard)",
     status: "Completed",
     timestamp: "1.5 hours ago",
@@ -460,13 +469,13 @@ export const INITIAL_TRANSACTIONS = [
     customerPhone: "+234 810 222 9988",
     itemsCount: 2,
     items: [
-      { name: "Apple Watch Series 9 GPS", qty: 2, price: 399.00 }
+      { name: "Michelin Primacy 4 Tyre 205/55R16", qty: 2, price: 115.00 }
     ],
-    total: 798.00,
+    total: 230.00,
     paymentMethod: "Mobile Money (Vodafone Cash)",
     status: "Pending", // Needs CEO approval!
     requiresApproval: true,
-    approvalReason: "Bulk tech hardware discount override applied",
+    approvalReason: "Bulk tyre order discount override applied",
     timestamp: "2 hours ago",
     date: "2026-10-03 16:04"
   },
@@ -477,10 +486,10 @@ export const INITIAL_TRANSACTIONS = [
     customerPhone: "+234 803 777 6655",
     itemsCount: 3,
     items: [
-      { name: "Smoked Turkey Club Sandwich", qty: 2, price: 8.50 },
-      { name: "Cold Pressed Orange & Ginger Juice 330ml", qty: 1, price: 3.95 }
+      { name: "Synthetic Engine Oil 5L (5W-30)", qty: 2, price: 35.00 },
+      { name: "Fuel Filter (In-Line)", qty: 1, price: 14.00 }
     ],
-    total: 20.95,
+    total: 84.00,
     paymentMethod: "Cash",
     status: "Completed",
     timestamp: "2.5 hours ago",
@@ -491,11 +500,12 @@ export const INITIAL_TRANSACTIONS = [
     clerkName: "Amara Okonkwo",
     customerName: "Folake Balogun",
     customerPhone: "+234 802 888 1122",
-    itemsCount: 1,
+    itemsCount: 2,
     items: [
-      { name: "Mediterranean Olive Oil 750ml", qty: 2, price: 18.00 }
+      { name: "CV Axle Shaft (Driver Side)", qty: 1, price: 88.00 },
+      { name: "ATF Automatic Transmission Fluid 1L", qty: 2, price: 11.00 }
     ],
-    total: 36.00,
+    total: 110.00,
     paymentMethod: "Mobile Money (MTN MoMo)",
     status: "Approved",
     timestamp: "3 hours ago",
@@ -637,10 +647,10 @@ export const SALES_7DAYS = [
 ];
 
 export const CATEGORY_REVENUE = [
-  { name: "Electronics", value: 48, amount: "$13,675", color: "#2563eb" },
-  { name: "Food & Bakery", value: 24, amount: "$6,837", color: "#16a34a" },
-  { name: "Beverages", value: 16, amount: "$4,558", color: "#ea580c" },
-  { name: "Clothing", value: 12, amount: "$3,418", color: "#7c3aed" }
+  { name: "Brakes & Rotors", value: 32, amount: "$9,120", color: "#FF6A13" },
+  { name: "Engine & Fluids", value: 28, amount: "$7,980", color: "#2563eb" },
+  { name: "Tyres & Wheels", value: 22, amount: "$6,270", color: "#10B981" },
+  { name: "Ignition & Electrical", value: 18, amount: "$5,130", color: "#8B5CF6" }
 ];
 
 export const PAYMENT_METHODS_DATA = [

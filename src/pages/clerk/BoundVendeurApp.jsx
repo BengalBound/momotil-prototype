@@ -166,7 +166,8 @@ export const BoundVendeurApp = () => {
     inventoryRequests,
     submitInventoryRequest,
     chatMessages,
-    sendChatMessage
+    sendChatMessage,
+    pricingSettings
   } = useApp();
 
   const R = currentRegion;
@@ -353,7 +354,11 @@ export const BoundVendeurApp = () => {
       } else if (lower.includes('discount') || lower.includes('limit')) {
         answer = `💡 Maximum clerk discount without manager authorization is 10%. Any sale over ${formatMoney(800)} or custom discount will automatically route to Manager Marc for 1-click approval.`;
       } else if (lower.includes('sold') || lower.includes('sales')) {
-        answer = `📊 Great job! You have completed ${salesCount} sales today totaling ${formatMoney(todayRevenue)}. Your estimated commission today is ${formatMoney(todayRevenue * 0.035)}.`;
+        const isCommOn = pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0;
+        const commRate = isCommOn ? Number(pricingSettings?.clerkCommissionRate ?? 5) : 0;
+        answer = isCommOn
+          ? `📊 Great job! You have completed ${salesCount} sales today totaling ${formatMoney(todayRevenue)}. Your estimated commission (${commRate}%) is ${formatMoney(todayRevenue * (commRate / 100))}.`
+          : `📊 Great job! You have completed ${salesCount} sales today totaling ${formatMoney(todayRevenue)} (Store operates in flat wage / zero-commission mode).`;
       } else {
         answer = `I checked our inventory database: item is recognized. You can take a photo of the product or barcode to auto-match availability.`;
       }
@@ -1346,7 +1351,9 @@ export const BoundVendeurApp = () => {
 
           {[
             { label: "Today's Personal Sales", value: formatMoney(todayRevenue), accent: true },
-            { label: 'Commission Earned (3.5%)', value: formatMoney(todayRevenue * 0.035), accent: true },
+            ...(pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0
+              ? [{ label: `Commission Earned (${pricingSettings.clerkCommissionRate}%)`, value: formatMoney(todayRevenue * (Number(pricingSettings.clerkCommissionRate) / 100)), accent: true }]
+              : [{ label: 'Store Compensation Model', value: 'Fixed Wage (Zero Commission)' }]),
             { label: 'Orders Completed', value: `${salesCount} transactions` },
             { label: 'Assigned Team', value: 'Team Alpha (Morning Shift)' },
             { label: 'Terminal Mode', value: 'Offline SQLite Capable' },

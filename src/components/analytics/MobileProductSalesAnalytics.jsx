@@ -4,7 +4,7 @@ import {
   TrendingUp, Package, Users, DollarSign, Award,
   Sparkles, CheckCircle2, ChevronRight, ChevronDown, Search, X,
   ArrowUpRight, BarChart3, Zap, Filter, Calendar, UserCheck,
-  Flame, ArrowUpDown, Check, RefreshCw
+  Flame, ArrowUpDown, Check, RefreshCw, Sliders, Settings2
 } from 'lucide-react';
 import {
   ResponsiveContainer, AreaChart, Area,
@@ -26,10 +26,16 @@ export const MobileProductSalesAnalytics = ({
     products,
     currentRegion,
     formatMoney,
-    teamClerks
+    teamClerks,
+    pricingSettings,
+    updatePricingSettings
   } = useApp();
 
   const R = currentRegion;
+
+  // ── Store Commission Policy Configuration ────────────────────────────────
+  const isCommissionActive = pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 5) > 0;
+  const activeCommissionRate = isCommissionActive ? Number(pricingSettings?.clerkCommissionRate ?? 5) : 0;
 
   // ── Mobile Navigation & View States ───────────────────────────────────────
   // Primary view tabs: 'leaderboard' (Which products sell more) | 'trends' (Chart & velocity) | 'team' (Who sold what)
@@ -41,6 +47,7 @@ export const MobileProductSalesAnalytics = ({
   const [sortMetric, setSortMetric] = useState('units'); // 'units' | 'revenue'
   const [expandedProduct, setExpandedProduct] = useState(null);
   const [showFilterDrawer, setShowFilterDrawer] = useState(null); // 'vendor' | 'category' | null
+  const [showCommissionModal, setShowCommissionModal] = useState(false);
 
   // Available vendor list
   const availableClerks = useMemo(() => {
@@ -69,16 +76,18 @@ export const MobileProductSalesAnalytics = ({
     return Array.from(set);
   }, [products]);
 
-  // Analytics calculation
+  // Analytics calculation with dynamic store commission policy
   const effectiveVendor = role === 'vendor' ? (vendorLock || selectedVendor) : selectedVendor;
   const analyticsData = useMemo(() => {
     return calculateProductSalesAnalytics(transactions, {
       vendor: effectiveVendor,
       product: selectedProduct,
       timeRange,
-      managerTeam: role === 'manager' && selectedVendor === 'all' ? managerTeam : null
+      managerTeam: role === 'manager' && selectedVendor === 'all' ? managerTeam : null,
+      commissionEnabled: isCommissionActive,
+      commissionRate: activeCommissionRate
     });
-  }, [transactions, effectiveVendor, selectedProduct, timeRange, role, managerTeam]);
+  }, [transactions, effectiveVendor, selectedProduct, timeRange, role, managerTeam, isCommissionActive, activeCommissionRate]);
 
   const {
     kpis,
@@ -121,7 +130,7 @@ export const MobileProductSalesAnalytics = ({
   const hasActiveFilters = (role !== 'vendor' && selectedVendor !== 'all') || selectedCategory !== 'all' || selectedProduct !== 'all';
 
   return (
-    <div className="space-y-3 pb-16 select-none text-xs animate-fadeIn">
+    <div className="space-y-3 pb-16 select-none text-xs animate-fadeIn relative">
       {/* ── 1. NATIVE MOBILE HEADER CARD & HERO METRIC ── */}
       <div className="p-4 rounded-3xl bg-gradient-to-b from-[var(--card)] to-[var(--raise)] border border-[rgba(var(--lineRGB),0.1)] shadow-sm space-y-3">
         {/* Role & Time Range Row */}
@@ -178,30 +187,54 @@ export const MobileProductSalesAnalytics = ({
 
         {/* Tailored Secondary Metrics */}
         {role === 'vendor' ? (
-          <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shadow-inner">
-                💰
-              </div>
-              <div>
-                <div className="text-[9px] uppercase font-bold text-[rgba(var(--fgRGB),0.55)]">
-                  My Commission Earned
+          isCommissionActive ? (
+            /* Commission Card (Only shown if store operates with commission) */
+            <div className="p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm shadow-inner">
+                  💰
                 </div>
-                <div className="font-display font-black text-sm text-emerald-400">
-                  {formatMoney(kpis.totalProfit * 0.10)}
+                <div>
+                  <div className="text-[9px] uppercase font-bold text-[rgba(var(--fgRGB),0.55)]">
+                    My Commission Earned
+                  </div>
+                  <div className="font-display font-black text-sm text-emerald-400">
+                    {formatMoney(kpis.totalProfit * (activeCommissionRate / 100))}
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--card)] text-[rgba(var(--fgRGB),0.7)] border border-[rgba(var(--lineRGB),0.1)]">
+                  {activeCommissionRate}% rate
+                </span>
+                <div className="text-[9px] text-[rgba(var(--fgRGB),0.45)] mt-0.5">
+                  {kpis.totalOrders} transactions
                 </div>
               </div>
             </div>
-            <div className="text-right">
-              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--card)] text-[rgba(var(--fgRGB),0.7)] border border-[rgba(var(--lineRGB),0.1)]">
-                10% cut
+          ) : (
+            /* Flat Wage / Zero-Commission Mode Card for Vendor */
+            <div className="p-3 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.09)] flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[var(--raise)] text-[var(--acc)] flex items-center justify-center font-bold text-sm">
+                  🏷️
+                </div>
+                <div>
+                  <div className="text-[9px] uppercase font-bold text-[rgba(var(--fgRGB),0.55)]">
+                    Store Policy: Flat Wage Mode
+                  </div>
+                  <div className="font-display font-bold text-xs text-[var(--fg)]">
+                    {kpis.totalOrders} Completed Orders ({kpis.totalUnitsSold} items)
+                  </div>
+                </div>
+              </div>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-[var(--raise)] text-[rgba(var(--fgRGB),0.6)] border border-[rgba(var(--lineRGB),0.08)]">
+                Zero Commission
               </span>
-              <div className="text-[9px] text-[rgba(var(--fgRGB),0.45)] mt-0.5">
-                {kpis.totalOrders} transactions
-              </div>
             </div>
-          </div>
+          )
         ) : (
+          /* Manager & Owner Quick Metrics */
           <div className="grid grid-cols-2 gap-2 pt-1 border-t border-[rgba(var(--lineRGB),0.07)] text-[10px]">
             <div className="p-2.5 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.06)]">
               <span className="text-[rgba(var(--fgRGB),0.45)] block uppercase font-mono text-[9px]">Avg Order Value</span>
@@ -215,8 +248,24 @@ export const MobileProductSalesAnalytics = ({
         )}
       </div>
 
-      {/* ── 2. MOBILE QUICK FILTER PILLS ── */}
+      {/* ── 2. MOBILE QUICK FILTER PILLS & OWNER COMMISSION TRIGGER ── */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none px-0.5">
+        {/* Store Owner Quick Commission Policy Pill */}
+        {role === 'owner' && (
+          <button
+            onClick={() => setShowCommissionModal(true)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold border whitespace-nowrap transition active:scale-95 ${
+              isCommissionActive
+                ? 'bg-amber-500/15 text-amber-400 border-amber-500/30 shadow-xs'
+                : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border-[rgba(var(--lineRGB),0.12)]'
+            }`}
+          >
+            <span>💰</span>
+            <span>Comm: {isCommissionActive ? `${activeCommissionRate}%` : 'Off (0%)'}</span>
+            <Sliders className="w-3 h-3 opacity-60" />
+          </button>
+        )}
+
         {/* Vendor Selector Pill (Manager & Owner) */}
         {role !== 'vendor' && (
           <button
@@ -340,7 +389,132 @@ export const MobileProductSalesAnalytics = ({
         </div>
       )}
 
-      {/* ── 3. MOBILE TAB NAVIGATION BAR (3 Clean Views) ── */}
+      {/* ── 3. STORE OWNER COMMISSION CONFIGURATION MODAL ── */}
+      {showCommissionModal && (
+        <div className="p-4 rounded-3xl bg-[var(--card)] border-2 border-amber-500/30 shadow-xl space-y-3.5 animate-fadeIn">
+          <div className="flex items-center justify-between pb-2 border-b border-[rgba(var(--lineRGB),0.08)]">
+            <div className="flex items-center gap-2">
+              <span className="text-base">💰</span>
+              <div>
+                <h4 className="font-display font-bold text-xs text-[var(--fg)]">Store Commission Settings</h4>
+                <p className="text-[10px] text-[rgba(var(--fgRGB),0.5)]">Configure staff commission or set flat salary</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowCommissionModal(false)}
+              className="p-1 rounded-lg text-[rgba(var(--fgRGB),0.5)] hover:text-[var(--fg)]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Master Toggle */}
+          <div className="flex items-center justify-between p-3 rounded-2xl bg-[var(--raise)] border border-[rgba(var(--lineRGB),0.08)]">
+            <div>
+              <span className="font-bold text-xs text-[var(--fg)] block">Enable Sales Commission</span>
+              <span className="text-[10px] text-[rgba(var(--fgRGB),0.5)]">
+                {isCommissionActive ? 'Clerks earn commission on margin' : 'Disabled — Fixed wage store'}
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                updatePricingSettings({
+                  commissionEnabled: !isCommissionActive,
+                  clerkCommissionRate: isCommissionActive ? 0 : 5.0
+                });
+              }}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition flex items-center gap-1 ${
+                isCommissionActive
+                  ? 'bg-[var(--ok)] text-white shadow-xs'
+                  : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border border-[rgba(var(--lineRGB),0.15)]'
+              }`}
+            >
+              {isCommissionActive ? '✓ Active' : 'Off (Zero)'}
+            </button>
+          </div>
+
+          {isCommissionActive ? (
+            <div className="space-y-3 pt-1">
+              {/* Stepper & Slider */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold text-[rgba(var(--fgRGB),0.6)]">Commission Percentage:</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => updatePricingSettings({ clerkCommissionRate: Math.max(0, Number((activeCommissionRate - 0.5).toFixed(1))) })}
+                      className="w-6 h-6 rounded-lg bg-[var(--raise)] text-xs font-bold border border-[rgba(var(--lineRGB),0.1)] active:scale-90"
+                    >
+                      −
+                    </button>
+                    <span className="font-display font-black text-sm text-[var(--ok)] min-w-[40px] text-center">
+                      {activeCommissionRate}%
+                    </span>
+                    <button
+                      onClick={() => updatePricingSettings({ clerkCommissionRate: Math.min(25, Number((activeCommissionRate + 0.5).toFixed(1))) })}
+                      className="w-6 h-6 rounded-lg bg-[var(--raise)] text-xs font-bold border border-[rgba(var(--lineRGB),0.1)] active:scale-90"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <input
+                  type="range"
+                  min="0"
+                  max="25"
+                  step="0.5"
+                  value={activeCommissionRate}
+                  onChange={e => updatePricingSettings({ clerkCommissionRate: Number(e.target.value), commissionEnabled: Number(e.target.value) > 0 })}
+                  className="w-full accent-[var(--ok)] cursor-pointer"
+                />
+
+                {/* Quick Presets */}
+                <div className="flex items-center gap-1 pt-1">
+                  {[0, 2.5, 5, 7.5, 10, 15].map(val => (
+                    <button
+                      key={val}
+                      onClick={() => updatePricingSettings({ clerkCommissionRate: val, commissionEnabled: val > 0 })}
+                      className={`flex-1 py-1 rounded-xl text-[10px] font-bold border transition ${
+                        activeCommissionRate === val
+                          ? 'bg-[var(--ok)] text-white border-[var(--ok)]'
+                          : 'bg-[var(--raise)] text-[rgba(var(--fgRGB),0.6)] border-[rgba(var(--lineRGB),0.08)]'
+                      }`}
+                    >
+                      {val === 0 ? '0%' : `${val}%`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Live Preview */}
+              <div className="p-2.5 rounded-xl bg-[var(--raise)]/60 text-[10px] text-[rgba(var(--fgRGB),0.65)] space-y-1">
+                <div className="flex justify-between">
+                  <span>Gross Profit Pool:</span>
+                  <strong className="text-[var(--fg)]">{formatMoney(kpis.totalProfit)}</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span>Projected Clerk Commission:</span>
+                  <strong className="text-emerald-400">{formatMoney(kpis.totalProfit * (activeCommissionRate / 100))}</strong>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-3 rounded-2xl bg-[var(--raise)] text-[10px] text-[rgba(var(--fgRGB),0.6)] leading-relaxed space-y-1">
+              <p>💡 <strong>Zero-Commission Store:</strong> Staff earn a flat salary.</p>
+              <p>Frontline clerks won’t see commission figures, and manager reports focus strictly on gross revenue and orders.</p>
+            </div>
+          )}
+
+          <button
+            onClick={() => setShowCommissionModal(false)}
+            className="w-full py-2.5 rounded-xl bg-[var(--acc)] text-[var(--onAcc)] font-bold text-xs shadow-sm"
+          >
+            ✓ Done & Apply Policy
+          </button>
+        </div>
+      )}
+
+      {/* ── 4. MOBILE TAB NAVIGATION BAR (3 Clean Views) ── */}
       <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-[var(--card)] border border-[rgba(var(--lineRGB),0.08)] text-[11px] font-bold">
         <button
           onClick={() => setActiveTab('leaderboard')}
@@ -440,6 +614,7 @@ export const MobileProductSalesAnalytics = ({
               const metricVal = sortMetric === 'revenue' ? p.totalRevenue : p.unitsSold;
               const barPercentage = Math.round((metricVal / maxMetricValue) * 100);
               const isExpanded = expandedProduct === p.name;
+              const displayMargin = p.marginPercent !== undefined ? p.marginPercent : Math.round((p.totalProfit / (p.totalRevenue || 1)) * 100);
 
               return (
                 <div
@@ -480,7 +655,7 @@ export const MobileProductSalesAnalytics = ({
                         {formatMoney(p.totalRevenue)}
                       </div>
                       <div className="text-[9px] font-mono text-emerald-400 font-semibold">
-                        {(p.marginPercent !== undefined ? p.marginPercent : Math.round((p.totalProfit / (p.totalRevenue || 1)) * 100))}% margin
+                        {displayMargin}% margin
                       </div>
                     </div>
                   </div>
@@ -725,9 +900,15 @@ export const MobileProductSalesAnalytics = ({
                         <div className="font-display font-black text-xs text-[var(--fg)]">
                           {formatMoney(v.revenue)}
                         </div>
-                        <div className="text-[9px] font-mono text-emerald-400 font-semibold">
-                          Comm: {formatMoney(v.commission)}
-                        </div>
+                        {isCommissionActive ? (
+                          <div className="text-[9px] font-mono text-emerald-400 font-semibold">
+                            Comm: {formatMoney(v.commission)}
+                          </div>
+                        ) : (
+                          <div className="text-[9px] font-mono text-[rgba(var(--fgRGB),0.5)] font-semibold">
+                            Avg: {formatMoney(v.revenue / (v.orders || 1))}
+                          </div>
+                        )}
                       </div>
                     </div>
 

@@ -31,10 +31,16 @@ export const ProductSalesAnalyticsView = ({
     currentRegion,
     formatMoney,
     teamClerks,
+    pricingSettings,
+    updatePricingSettings,
     addToast
   } = useApp();
 
   const R = currentRegion;
+
+  // ── Store Commission Policy ───────────────────────────────────────────────
+  const isCommissionActive = pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 5) > 0;
+  const activeCommissionRate = isCommissionActive ? Number(pricingSettings?.clerkCommissionRate ?? 5) : 0;
 
   // ── Filter State ──────────────────────────────────────────────────────────
   const [selectedVendor, setSelectedVendor] = useState(vendorLock || 'all');
@@ -42,6 +48,7 @@ export const ProductSalesAnalyticsView = ({
   const [timeRange, setTimeRange] = useState('7d'); // 'today' | '7d' | '30d' | 'all'
   const [chartMetric, setChartMetric] = useState('both'); // 'both' | 'units' | 'revenue'
   const [searchQuery, setSearchQuery] = useState('');
+  const [showCommissionModal, setShowCommissionModal] = useState(false);
 
   // Clerks available to filter by based on role
   const availableClerks = useMemo(() => {
@@ -80,9 +87,11 @@ export const ProductSalesAnalyticsView = ({
       vendor: effectiveVendor,
       product: selectedProduct,
       timeRange,
-      managerTeam: role === 'manager' && selectedVendor === 'all' ? managerTeam : null
+      managerTeam: role === 'manager' && selectedVendor === 'all' ? managerTeam : null,
+      commissionEnabled: isCommissionActive,
+      commissionRate: activeCommissionRate
     });
-  }, [transactions, effectiveVendor, selectedProduct, timeRange, role, managerTeam]);
+  }, [transactions, effectiveVendor, selectedProduct, timeRange, role, managerTeam, isCommissionActive, activeCommissionRate]);
 
   const {
     kpis,
@@ -204,6 +213,21 @@ export const ProductSalesAnalyticsView = ({
             </button>
           )}
 
+          {role === 'owner' && (
+            <button
+              onClick={() => setShowCommissionModal(!showCommissionModal)}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition border ${
+                isCommissionActive
+                  ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                  : 'bg-[var(--raise)] text-[rgba(var(--fgRGB),0.6)] border-[rgba(var(--lineRGB),0.12)]'
+              }`}
+              title="Store Commission Policy Settings"
+            >
+              <span>💰</span>
+              <span>Commission: {isCommissionActive ? `${activeCommissionRate}%` : 'Off (0%)'}</span>
+            </button>
+          )}
+
           <button
             onClick={handleExportCSV}
             className="px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition hover:opacity-90 shadow-xs"
@@ -214,6 +238,86 @@ export const ProductSalesAnalyticsView = ({
           </button>
         </div>
       </div>
+
+      {/* ── Store Commission Settings Modal for Web Owner ── */}
+      {showCommissionModal && (
+        <div className="p-4 rounded-2xl bg-[var(--card)] border-2 border-amber-500/30 shadow-lg space-y-3 animate-fadeIn">
+          <div className="flex items-center justify-between pb-2 border-b border-[rgba(var(--lineRGB),0.08)]">
+            <div className="flex items-center gap-2">
+              <span className="text-base">💰</span>
+              <div>
+                <h4 className="font-display font-bold text-sm text-[var(--fg)]">Store Commission Policy</h4>
+                <p className="text-xs text-[rgba(var(--fgRGB),0.5)]">Modify commission margin percentage or disable completely for fixed wage stores</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowCommissionModal(false)}
+              className="p-1 rounded-lg text-[rgba(var(--fgRGB),0.5)] hover:text-[var(--fg)]"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+            <div className="p-3 rounded-xl bg-[var(--raise)] border border-[rgba(var(--lineRGB),0.08)] flex items-center justify-between">
+              <div>
+                <span className="font-bold text-xs text-[var(--fg)] block">Sales Commission Status</span>
+                <span className="text-[10px] text-[rgba(var(--fgRGB),0.5)]">
+                  {isCommissionActive ? `Enabled (${activeCommissionRate}% of margin)` : 'Disabled — Zero commission store'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  updatePricingSettings({
+                    commissionEnabled: !isCommissionActive,
+                    clerkCommissionRate: isCommissionActive ? 0 : 5.0
+                  });
+                }}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition ${
+                  isCommissionActive ? 'bg-[var(--ok)] text-white' : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border border-[rgba(var(--lineRGB),0.15)]'
+                }`}
+              >
+                {isCommissionActive ? '✓ Commission Active' : 'Off (Flat Wage)'}
+              </button>
+            </div>
+
+            {isCommissionActive && (
+              <div className="p-3 rounded-xl bg-[var(--raise)] border border-[rgba(var(--lineRGB),0.08)] space-y-1.5">
+                <div className="flex justify-between text-xs">
+                  <span className="text-[rgba(var(--fgRGB),0.6)]">Commission Percentage:</span>
+                  <span className="font-bold text-[var(--ok)]">{activeCommissionRate}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="25"
+                  step="0.5"
+                  value={activeCommissionRate}
+                  onChange={e => updatePricingSettings({ clerkCommissionRate: Number(e.target.value), commissionEnabled: Number(e.target.value) > 0 })}
+                  className="w-full accent-[var(--ok)] cursor-pointer"
+                />
+                <div className="flex items-center gap-1">
+                  {[0, 2.5, 5, 7.5, 10, 15].map(val => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => updatePricingSettings({ clerkCommissionRate: val, commissionEnabled: val > 0 })}
+                      className={`flex-1 py-1 rounded-lg text-[10px] font-bold border transition ${
+                        activeCommissionRate === val
+                          ? 'bg-[var(--ok)] text-white border-[var(--ok)]'
+                          : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border-[rgba(var(--lineRGB),0.1)]'
+                      }`}
+                    >
+                      {val === 0 ? 'Off' : `${val}%`}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Interactive Filter Controls Bar ── */}
       <div

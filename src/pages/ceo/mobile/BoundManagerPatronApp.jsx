@@ -688,7 +688,10 @@ export const BoundManagerPatronApp = () => {
                   </div>
                   <div className="text-right">
                     <div className="font-display font-black text-sm text-[var(--acc)]">{formatMoney(clerk.salesToday)}</div>
-                    <div className="text-[10px] text-[var(--ok)] font-mono">{clerk.ordersToday} orders · Comm: {formatMoney(clerk.commissionEarned)}</div>
+                    <div className="text-[10px] text-[var(--ok)] font-mono">
+                      {clerk.ordersToday} orders
+                      {pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0 ? ` · Comm: ${formatMoney(clerk.commissionEarned)}` : ''}
+                    </div>
                   </div>
                 </div>
 
@@ -1148,7 +1151,10 @@ export const BoundManagerPatronApp = () => {
                 </div>
                 <div className="text-right">
                   <div className="font-display font-black text-sm text-[var(--acc)]">{formatMoney(c.salesToday)}</div>
-                  <div className="text-[10px] font-mono text-[var(--ok)]">{c.ordersToday} orders · Comm: {formatMoney(c.commissionEarned)}</div>
+                  <div className="text-[10px] font-mono text-[var(--ok)]">
+                    {c.ordersToday} orders
+                    {pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0 ? ` · Comm: ${formatMoney(c.commissionEarned)}` : ''}
+                  </div>
                 </div>
               </div>
             ))}
@@ -1298,20 +1304,73 @@ export const BoundManagerPatronApp = () => {
                 />
               </div>
 
-              <div>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="text-[rgba(var(--fgRGB),0.6)]">Clerk Commission Rate:</span>
-                  <span className="font-bold text-[var(--ok)]">{pricingSettings.clerkCommissionRate}%</span>
+              {/* Storewide Clerk Commission Control */}
+              <div className="p-3.5 rounded-xl bg-[var(--raise)] border border-[rgba(var(--lineRGB),0.08)] space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-xs text-[var(--fg)] block">Clerk Commission Program</span>
+                    <span className="text-[10px] text-[rgba(var(--fgRGB),0.55)]">
+                      {pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0
+                        ? `Active · Clerks earn ${pricingSettings.clerkCommissionRate}% on sales`
+                        : 'Disabled · Fixed wage / zero-commission store'}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const isCurrentlyOn = pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0;
+                      updatePricingSettings({
+                        commissionEnabled: !isCurrentlyOn,
+                        clerkCommissionRate: isCurrentlyOn ? 0 : 5.0
+                      });
+                    }}
+                    className={`px-3 py-1 rounded-full text-[10px] font-bold transition flex items-center gap-1 ${
+                      pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0
+                        ? 'bg-[var(--ok)] text-white shadow-xs'
+                        : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border border-[rgba(var(--lineRGB),0.12)]'
+                    }`}
+                  >
+                    {pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0 ? '✓ Enabled' : 'Off (Zero)'}
+                  </button>
                 </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  step="0.5"
-                  value={pricingSettings.clerkCommissionRate}
-                  onChange={e => updatePricingSettings({ clerkCommissionRate: Number(e.target.value) })}
-                  className="w-full accent-[var(--ok)] cursor-pointer"
-                />
+
+                {pricingSettings?.commissionEnabled !== false && Number(pricingSettings?.clerkCommissionRate ?? 0) > 0 ? (
+                  <div className="space-y-2 pt-1 border-t border-[rgba(var(--lineRGB),0.06)]">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-[rgba(var(--fgRGB),0.6)]">Store Commission Rate:</span>
+                      <span className="font-bold text-[var(--ok)]">{pricingSettings.clerkCommissionRate}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="25"
+                      step="0.5"
+                      value={pricingSettings.clerkCommissionRate}
+                      onChange={e => updatePricingSettings({ clerkCommissionRate: Number(e.target.value), commissionEnabled: Number(e.target.value) > 0 })}
+                      className="w-full accent-[var(--ok)] cursor-pointer"
+                    />
+                    <div className="flex items-center gap-1">
+                      {[0, 2.5, 5, 7.5, 10, 15].map(val => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => updatePricingSettings({ clerkCommissionRate: val, commissionEnabled: val > 0 })}
+                          className={`flex-1 py-1 rounded-lg text-[10px] font-bold border transition ${
+                            pricingSettings.clerkCommissionRate === val
+                              ? 'bg-[var(--ok)] text-white border-[var(--ok)]'
+                              : 'bg-[var(--card)] text-[rgba(var(--fgRGB),0.6)] border-[rgba(var(--lineRGB),0.1)]'
+                          }`}
+                        >
+                          {val === 0 ? 'Off' : `${val}%`}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-[10px] text-[rgba(var(--fgRGB),0.55)] bg-[var(--card)] p-2.5 rounded-lg border border-[rgba(var(--lineRGB),0.06)] leading-relaxed">
+                    💡 <strong>Zero-Commission Mode Active:</strong> This store does not pay commission. All clerk and manager dashboards operate without commission stats or earnings tickers.
+                  </div>
+                )}
               </div>
 
               <div>

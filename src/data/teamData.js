@@ -362,7 +362,8 @@ export const INITIAL_CHAT_MESSAGES = [
 
 export const INITIAL_PRICING_SETTINGS = {
   defaultMarkupPercent: 30,
-  clerkCommissionRate: 3.5,
+  commissionEnabled: true,
+  clerkCommissionRate: 5.0,
   approvalThreshold: 800
 };
 

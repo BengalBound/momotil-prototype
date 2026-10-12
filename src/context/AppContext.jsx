@@ -29,11 +29,20 @@ export const AppProvider = ({ children }) => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        const hasAuto = parsed.some(p => p.id === 'prod-auto-1' || p.name === 'Bosch Brake Pads');
-        if (!hasAuto) {
-          return [...INITIAL_AUTO_PRODUCTS, ...parsed];
+        // Remove any stale non-auto categories left from old sessions
+        const nonAutoIds = new Set(['prod-1','prod-2','prod-3','prod-4','prod-5','prod-6',
+          'prod-8','prod-9','prod-10','prod-11','prod-12','prod-13','prod-14',
+          'prod-15','prod-16','prod-17','prod-18','prod-19','prod-20','prod-21','prod-22']);
+        const nonAutoCategories = new Set(['Electronics', 'Clothing', 'Food', 'Beverages', 'Food & Bakery']);
+        // If any stale non-auto-category products are detected, flush to fresh data
+        const hasStale = parsed.some(p => nonAutoCategories.has(p.category));
+        if (hasStale) {
+          // Clear localStorage so the next load gets fresh auto-only data
+          localStorage.removeItem('momotill_products');
+          return [...INITIAL_AUTO_PRODUCTS, ...INITIAL_PRODUCTS];
         }
-        return parsed;
+        const hasAuto = parsed.some(p => p.id === 'prod-auto-1' || p.id === 'prod-1');
+        return hasAuto ? parsed : [...INITIAL_AUTO_PRODUCTS, ...parsed];
       } catch (e) {
         return [...INITIAL_AUTO_PRODUCTS, ...INITIAL_PRODUCTS];
       }
@@ -51,11 +60,16 @@ export const AppProvider = ({ children }) => {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        if (parsed.length >= 15) return parsed;
-        // Merge saved recent transactions with extended transactions
+        const nonAutoCategories = new Set(['Electronics', 'Clothing', 'Food', 'Beverages', 'Food & Bakery']);
+        const hasStale = parsed.some(t =>
+          (t.items || []).some(i => nonAutoCategories.has(i.category))
+        );
+        if (hasStale) {
+          localStorage.removeItem('momotill_transactions');
+          return EXTENDED_TRANSACTIONS;
+        }
         const existingIds = new Set(parsed.map(t => t.id));
-        const merged = [...parsed, ...EXTENDED_TRANSACTIONS.filter(t => !existingIds.has(t.id))];
-        return merged;
+        return parsed.length >= 15 ? parsed : [...parsed, ...EXTENDED_TRANSACTIONS.filter(t => !existingIds.has(t.id))];
       } catch (e) {
         return EXTENDED_TRANSACTIONS;
       }
@@ -624,8 +638,19 @@ export const AppProvider = ({ children }) => {
 
   // Pricing & Commissions Settings
   const updatePricingSettings = (newSettings) => {
-    setPricingSettings(prev => ({ ...prev, ...newSettings }));
-    addToast('Pricing Updated', 'Store markup & commission settings updated', 'success');
+    setPricingSettings(prev => {
+      const updated = { ...prev, ...newSettings };
+      try {
+        localStorage.setItem('momotill_pricing', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+    const msg = newSettings.commissionEnabled === false
+      ? 'Store operates in zero-commission fixed wage mode'
+      : (newSettings.clerkCommissionRate !== undefined
+          ? `Clerk commission margin set to ${newSettings.clerkCommissionRate}%`
+          : 'Store commission and pricing policy updated');
+    addToast('Commission & Pricing Updated', msg, 'success');
   };
 
   const updateProductPriceAndCommission = (productId, updates) => {

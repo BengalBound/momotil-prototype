@@ -44,11 +44,12 @@ export const EXTENDED_TRANSACTIONS = [
     clerkName: "Zainab Bello",
     customerName: "Dr. Samuel Adeyemi",
     customerPhone: "+234 812 555 7788",
-    itemsCount: 1,
+    itemsCount: 2,
     items: [
-      { name: "iPhone 15 Pro Max 256GB", qty: 1, price: 999.00, costPrice: 820.00, category: "Electronics" }
+      { name: "Optima RedTop 12V Car Battery", qty: 1, price: 189.00, costPrice: 128.00, category: "Auto Parts" },
+      { name: "Alternator 90A (Rebuilt)", qty: 1, price: 95.00, costPrice: 58.00, category: "Auto Parts" }
     ],
-    total: 999.00,
+    total: 284.00,
     paymentMethod: "Card (Visa Debit)",
     status: "Completed",
     timestamp: "45 mins ago",
@@ -63,10 +64,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+233 24 999 8877",
     itemsCount: 3,
     items: [
-      { name: "BengalBound Premium Cotton T-Shirt", qty: 2, price: 25.00, costPrice: 10.00, category: "Clothing" },
-      { name: "Water-resistant Trail Cap", qty: 1, price: 22.00, costPrice: 8.50, category: "Clothing" }
+      { name: "Brembo Heavy Duty Brake Discs", qty: 2, price: 68.00, costPrice: 42.00, category: "Auto Parts" },
+      { name: "Headlight Bulb H4 (Pair) 60/55W", qty: 1, price: 18.00, costPrice: 8.00, category: "Auto Parts" }
     ],
-    total: 72.00,
+    total: 154.00,
     paymentMethod: "Mobile Money (Wave)",
     status: "Approved",
     timestamp: "1.2 hours ago",
@@ -99,10 +100,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+234 810 222 9988",
     itemsCount: 5,
     items: [
-      { name: "Specialty Caramel Macchiato Latte", qty: 3, price: 4.50, costPrice: 1.80, category: "Food & Bakery" },
-      { name: "Artisan Sourdough Loaf", qty: 2, price: 6.50, costPrice: 2.20, category: "Food & Bakery" }
+      { name: "Radiator Coolant Antifreeze 1L", qty: 3, price: 9.00, costPrice: 4.50, category: "Auto Parts" },
+      { name: "Fuel Filter (In-Line)", qty: 2, price: 14.00, costPrice: 7.00, category: "Auto Parts" }
     ],
-    total: 26.50,
+    total: 55.00,
     paymentMethod: "Cash",
     status: "Completed",
     timestamp: "2.5 hours ago",
@@ -117,10 +118,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+234 803 777 6655",
     itemsCount: 2,
     items: [
-      { name: "Sony WH-1000XM5 Wireless Headphones", qty: 1, price: 349.99, costPrice: 260.00, category: "Electronics" },
-      { name: "Logitech MX Master 3S Mouse", qty: 1, price: 99.99, costPrice: 65.00, category: "Electronics" }
+      { name: "Monroe Gas-Matic Shock Absorbers (Pair)", qty: 1, price: 120.00, costPrice: 78.00, category: "Auto Parts" },
+      { name: "Tie Rod End (Inner & Outer Kit)", qty: 1, price: 38.00, costPrice: 20.00, category: "Auto Parts" }
     ],
-    total: 449.98,
+    total: 158.00,
     paymentMethod: "Mobile Money (Orange Money)",
     status: "Approved",
     timestamp: "3 hours ago",
@@ -171,10 +172,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+880 1711 223344",
     itemsCount: 2,
     items: [
-      { name: "Heritage Denim Jacket", qty: 1, price: 89.50, costPrice: 45.00, category: "Clothing" },
-      { name: "Athletic Flex Performance Hoodie", qty: 1, price: 65.00, costPrice: 32.00, category: "Clothing" }
+      { name: "Bosch Brake Pads (Front Set)", qty: 2, price: 45.00, costPrice: 28.00, category: "Auto Parts" },
+      { name: "Wiper Blade Set (Front Pair)", qty: 2, price: 13.00, costPrice: 6.50, category: "Auto Parts" }
     ],
-    total: 154.50,
+    total: 116.00,
     paymentMethod: "Card (Visa)",
     status: "Completed",
     timestamp: "6 hours ago",
@@ -206,10 +207,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+225 05 99 88 77",
     itemsCount: 3,
     items: [
-      { name: "Anker 737 PowerBank 24,000mAh", qty: 1, price: 129.99, costPrice: 85.00, category: "Electronics" },
-      { name: "Premium Oil Filter", qty: 2, price: 12.50, costPrice: 6.00, category: "Auto Parts" }
+      { name: "OBD2 Diagnostic Scanner", qty: 1, price: 55.00, costPrice: 30.00, category: "Auto Parts" },
+      { name: "Premium Oil Filter (Universal)", qty: 2, price: 12.50, costPrice: 6.00, category: "Auto Parts" }
     ],
-    total: 154.99,
+    total: 80.00,
     paymentMethod: "Mobile Money (MTN MoMo)",
     status: "Approved",
     timestamp: "8 hours ago",
@@ -224,10 +225,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+225 01 22 33 44",
     itemsCount: 3,
     items: [
-      { name: "Smoked Turkey Club Sandwich", qty: 2, price: 8.50, costPrice: 3.50, category: "Food & Bakery" },
-      { name: "Cold Pressed Orange & Ginger Juice 330ml", qty: 1, price: 3.95, costPrice: 1.50, category: "Food & Bakery" }
+      { name: "ATF Automatic Transmission Fluid 1L", qty: 2, price: 11.00, costPrice: 5.50, category: "Auto Parts" },
+      { name: "Alloy Wheel Lug Nuts M12×1.5 (Set of 20)", qty: 1, price: 22.00, costPrice: 10.00, category: "Auto Parts" }
     ],
-    total: 20.95,
+    total: 44.00,
     paymentMethod: "Cash",
     status: "Completed",
     timestamp: "9 hours ago",
@@ -262,9 +263,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+221 70 888 9900",
     itemsCount: 2,
     items: [
-      { name: "Samsung Galaxy S24 Ultra", qty: 1, price: 1199.00, costPrice: 950.00, category: "Electronics" }
+      { name: "Michelin Primacy 4 Tyre 205/55R16", qty: 2, price: 115.00, costPrice: 82.00, category: "Auto Parts" },
+      { name: "Alloy Wheel Lug Nuts M12×1.5 (Set of 20)", qty: 1, price: 22.00, costPrice: 10.00, category: "Auto Parts" }
     ],
-    total: 1199.00,
+    total: 252.00,
     paymentMethod: "Card (Visa)",
     status: "Completed",
     timestamp: "1 day ago",
@@ -297,7 +299,7 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+234 802 123 9876",
     itemsCount: 3,
     items: [
-      { name: "BengalBound Premium Cotton T-Shirt", qty: 3, price: 25.00, costPrice: 10.00, category: "Clothing" }
+      { name: "Brembo Heavy Duty Brake Discs", qty: 2, price: 68.00, costPrice: 42.00, category: "Auto Parts" }
     ],
     total: 75.00,
     paymentMethod: "Cash",
@@ -370,10 +372,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+234 818 990 0112",
     itemsCount: 2,
     items: [
-      { name: "Apple Watch Series 9 GPS", qty: 1, price: 399.00, costPrice: 310.00, category: "Electronics" },
-      { name: "Water-resistant Trail Cap", qty: 1, price: 22.00, costPrice: 8.50, category: "Clothing" }
+      { name: "CV Axle Shaft (Driver Side)", qty: 1, price: 88.00, costPrice: 55.00, category: "Auto Parts" },
+      { name: "Tie Rod End (Inner & Outer Kit)", qty: 1, price: 38.00, costPrice: 20.00, category: "Auto Parts" }
     ],
-    total: 421.00,
+    total: 126.00,
     paymentMethod: "Card (Mastercard)",
     status: "Completed",
     timestamp: "2 days ago",
@@ -388,11 +390,11 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+225 07 11 22 33",
     itemsCount: 4,
     items: [
-      { name: "BengalBound Premium Cotton T-Shirt", qty: 2, price: 25.00, costPrice: 10.00, category: "Clothing" },
-      { name: "Heritage Denim Jacket", qty: 1, price: 89.50, costPrice: 45.00, category: "Clothing" },
-      { name: "Urban Chino Trousers - Khaki", qty: 1, price: 49.00, costPrice: 22.00, category: "Clothing" }
+      { name: "Brembo Heavy Duty Brake Discs", qty: 2, price: 68.00, costPrice: 42.00, category: "Auto Parts" },
+      { name: "12V DC Portable Tyre Inflator", qty: 1, price: 32.00, costPrice: 18.00, category: "Auto Parts" },
+      { name: "Jumper / Booster Cables 400A 4m", qty: 1, price: 24.00, costPrice: 11.00, category: "Auto Parts" }
     ],
-    total: 188.50,
+    total: 192.00,
     paymentMethod: "Mobile Money (Wave)",
     status: "Completed",
     timestamp: "2 days ago",
@@ -445,10 +447,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+225 05 33 44 55",
     itemsCount: 2,
     items: [
-      { name: "Sony WH-1000XM5 Wireless Headphones", qty: 1, price: 349.99, costPrice: 260.00, category: "Electronics" },
-      { name: "Anker 737 PowerBank 24,000mAh", qty: 1, price: 129.99, costPrice: 85.00, category: "Electronics" }
+      { name: "Torque Wrench 1/2\" Drive 20-200Nm", qty: 1, price: 42.00, costPrice: 22.00, category: "Auto Parts" },
+      { name: "OBD2 Diagnostic Scanner", qty: 1, price: 55.00, costPrice: 30.00, category: "Auto Parts" }
     ],
-    total: 479.98,
+    total: 97.00,
     paymentMethod: "Card (Visa)",
     status: "Completed",
     timestamp: "3 days ago",
@@ -483,9 +485,9 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+233 20 888 7766",
     itemsCount: 2,
     items: [
-      { name: "iPhone 15 Pro Max 256GB", qty: 1, price: 999.00, costPrice: 820.00, category: "Electronics" }
+      { name: "Monroe Gas-Matic Shock Absorbers (Pair)", qty: 2, price: 120.00, costPrice: 78.00, category: "Auto Parts" }
     ],
-    total: 999.00,
+    total: 240.00,
     paymentMethod: "Mobile Money (AirtelTigo)",
     status: "Completed",
     timestamp: "4 days ago",
@@ -537,7 +539,7 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+221 77 444 3322",
     itemsCount: 3,
     items: [
-      { name: "BengalBound Premium Cotton T-Shirt", qty: 3, price: 25.00, costPrice: 10.00, category: "Clothing" }
+      { name: "Brembo Heavy Duty Brake Discs", qty: 2, price: 68.00, costPrice: 42.00, category: "Auto Parts" }
     ],
     total: 75.00,
     paymentMethod: "Cash",
@@ -574,9 +576,10 @@ export const EXTENDED_TRANSACTIONS = [
     customerPhone: "+225 07 55 44 33",
     itemsCount: 2,
     items: [
-      { name: "Samsung Galaxy S24 Ultra", qty: 1, price: 1199.00, costPrice: 950.00, category: "Electronics" }
+      { name: "Michelin Primacy 4 Tyre 205/55R16", qty: 2, price: 115.00, costPrice: 82.00, category: "Auto Parts" },
+      { name: "Torque Wrench 1/2\" Drive 20-200Nm", qty: 1, price: 42.00, costPrice: 22.00, category: "Auto Parts" }
     ],
-    total: 1199.00,
+    total: 272.00,
     paymentMethod: "Card (Visa)",
     status: "Completed",
     timestamp: "6 days ago",
@@ -605,7 +608,9 @@ export function calculateProductSalesAnalytics(allTransactions, {
   vendor = 'all',
   product = 'all',
   timeRange = '7d',
-  managerTeam = null
+  managerTeam = null,
+  commissionEnabled = true,
+  commissionRate = 10
 } = {}) {
   const transactions = allTransactions && allTransactions.length > 0 ? allTransactions : EXTENDED_TRANSACTIONS;
 
@@ -718,7 +723,8 @@ export function calculateProductSalesAnalytics(allTransactions, {
       vStats.revenue += lineRevenue;
       vStats.units += qty;
       vStats.productsSold[item.name] = (vStats.productsSold[item.name] || 0) + qty;
-      vStats.commission += lineProfit * 0.10; // 10% commission on gross profit
+      const effectiveCommRate = commissionEnabled ? (Number(commissionRate) / 100) : 0;
+      vStats.commission += lineProfit * effectiveCommRate;
 
       // Update Category Map
       if (!categoryMap.has(category)) {
@@ -857,6 +863,8 @@ export function calculateProductSalesAnalytics(allTransactions, {
       avgBasketValue: matchingOrdersCount > 0 ? Math.round((totalRevenue / matchingOrdersCount) * 100) / 100 : 0,
       totalProfit: Math.round(totalProfit * 100) / 100,
       profitMargin: totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0,
+      commissionEnabled,
+      commissionRate: commissionEnabled ? Number(commissionRate) : 0,
       topProductByUnits,
       topProductByRevenue,
       topVendor
